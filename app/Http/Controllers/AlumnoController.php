@@ -10,4 +10,9 @@ class AlumnoController extends Controller
     {
         return view('alumno.dashboard');
     }
+    
+    public function datos()
+    {
+        return view('alumno.datos'); 
+    }
 }

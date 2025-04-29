@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Http\Livewire\Alumno;
+namespace App\Livewire\Alumno;
 
 use Livewire\Component;
 use App\Models\Practica;
@@ -17,6 +17,7 @@ class CalendarioPracticas extends Component
     public $fechaActual;
     public $mostrarDatepicker = false;
     public $practicaExistente = false;
+    public $practicas = [];
     
     protected $rules = [
         'actividad' => 'required|min:3',
@@ -27,23 +28,38 @@ class CalendarioPracticas extends Component
     public function mount()
     {
         $this->fechaActual = now()->format('Y-m-d');
+        $this->cargarPracticas();
+    }
+    
+    public function cargarPracticas()
+    {
+        $this->practicas = Practica::where('user_id', Auth::id())
+            ->whereMonth('fecha', Carbon::parse($this->fechaActual)->month)
+            ->whereYear('fecha', Carbon::parse($this->fechaActual)->year)
+            ->get()
+            ->keyBy(function ($item) {
+                return Carbon::parse($item->fecha)->format('Y-m-d');
+            });
     }
     
     public function mesAnterior()
     {
         $this->fechaActual = Carbon::parse($this->fechaActual)->subMonth()->format('Y-m-d');
-        $this->mostrarDatepicker = false;
+        $this->cargarPracticas();
+        $this->dispatch('mes-cambiado'); // Emitir evento
     }
     
     public function mesSiguiente()
     {
         $this->fechaActual = Carbon::parse($this->fechaActual)->addMonth()->format('Y-m-d');
-        $this->mostrarDatepicker = false;
+        $this->cargarPracticas();
+        $this->dispatch('mes-cambiado'); // Emitir evento
     }
     
     public function actualizarFecha()
     {
         $this->mostrarDatepicker = false;
+        $this->cargarPracticas();
     }
     
     public function seleccionarFecha($fecha)
@@ -68,47 +84,41 @@ class CalendarioPracticas extends Component
     }
     
     public function guardarPractica()
-    {
-        $this->validate();
-        
-        Practica::updateOrCreate(
-            [
-                'user_id' => Auth::id(),
-                'fecha' => $this->fechaSeleccionada,
-            ],
-            [
-                'actividad' => $this->actividad,
-                'horas' => $this->horas,
-                'observaciones' => $this->observaciones,
-            ]
-        );
-        
-        $this->showModal = false;
-        session()->flash('message', 'Práctica guardada correctamente');
-    }
+{
+    $this->validate();
     
-    public function eliminarPractica()
-    {
-        Practica::where('user_id', Auth::id())
-                ->where('fecha', $this->fechaSeleccionada)
-                ->delete();
-        
-        $this->showModal = false;
-        session()->flash('message', 'Práctica eliminada correctamente');
-    }
+    Practica::updateOrCreate(
+        [
+            'user_id' => Auth::id(),
+            'fecha' => $this->fechaSeleccionada,
+        ],
+        [
+            'actividad' => $this->actividad,
+            'horas' => $this->horas,
+            'observaciones' => $this->observaciones,
+        ]
+    );
+    
+    $this->showModal = false;
+    $this->cargarPracticas(); // Actualizar prácticas inmediatamente
+    $this->dispatch('practica-actualizada'); // Nuevo evento
+    session()->flash('message', 'Práctica guardada correctamente');
+}
+
+public function eliminarPractica()
+{
+    Practica::where('user_id', Auth::id())
+            ->where('fecha', $this->fechaSeleccionada)
+            ->delete();
+    
+    $this->showModal = false;
+    $this->cargarPracticas(); // Actualizar prácticas inmediatamente
+    $this->dispatch('practica-actualizada'); // Nuevo evento
+    session()->flash('message', 'Práctica eliminada correctamente');
+}
     
     public function render()
-{
-    $practicas = Practica::where('user_id', Auth::id())
-                        ->whereMonth('fecha', Carbon::parse($this->fechaActual)->month)
-                        ->whereYear('fecha', Carbon::parse($this->fechaActual)->year)
-                        ->get()
-                        ->keyBy(function ($item) {
-                            return Carbon::parse($item->fecha)->format('Y-m-d');
-                        });
-
-    return view('livewire.alumno.calendario-practicas', [
-        'practicas' => $practicas,
-    ]);
-}
+    {
+        return view('livewire.alumno.calendario-practicas');
+    }
 }

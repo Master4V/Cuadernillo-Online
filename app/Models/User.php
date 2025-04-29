@@ -80,4 +80,12 @@ class User extends Authenticatable
     {
         return $this->role === 'admin';
     }
+
+    public function grupoComoAlumno(){
+        return $this->hasOne(Grupo::class, 'alumno_id');
+    }
+
+    public function alumnosComoProfesor(){
+        return $this->hasMany(Grupo::class, 'profesor_id');
+    }
 }

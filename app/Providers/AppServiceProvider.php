@@ -21,6 +21,6 @@ class AppServiceProvider extends ServiceProvider
     public function boot(): void
     {
         Livewire::component('alumno.calendario-practicas', 
-            \App\Http\Livewire\Alumno\CalendarioPracticas::class);
+            \App\Livewire\Alumno\CalendarioPracticas::class);
     }
 }

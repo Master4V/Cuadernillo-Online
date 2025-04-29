@@ -39,59 +39,59 @@
         </div>
         
         <!-- Calendario -->
-<div class="grid grid-cols-7 gap-1 mb-4">
-    @foreach(['Lun', 'Mar', 'Mié', 'Jue', 'Vie', 'Sáb', 'Dom'] as $day)
-        <div class="text-center font-medium py-2">{{ $day }}</div>
-    @endforeach
-    
-    @php
-        $fecha = \Carbon\Carbon::parse($fechaActual);
-        $startDay = $fecha->firstOfMonth()->dayOfWeekIso - 1;
-        $daysInMonth = $fecha->daysInMonth;
-        $today = now()->format('Y-m-d');
-        $currentMonthYear = $fecha->format('Y-m');
-    @endphp
-    
-    @for($i = 0; $i < $startDay; $i++)
-        <div class="h-12 border"></div>
-    @endfor
-    
-    @for($day = 1; $day <= $daysInMonth; $day++)
+        <div class="grid grid-cols-7 gap-1 mb-4" wire:key="calendario-{{ $fechaActual }}-{{ time() }}">
+            @foreach(['Lun', 'Mar', 'Mié', 'Jue', 'Vie', 'Sáb', 'Dom'] as $day)
+            <div class="text-center font-medium py-2">{{ $day }}</div>
+            @endforeach
+        
         @php
-            $currentDate = $currentMonthYear . '-' . str_pad($day, 2, '0', STR_PAD_LEFT);
-            $hasPractice = isset($practicas[$currentDate]);
-            $isToday = $currentDate === $today;
-            $dayClass = $hasPractice 
-                ? 'bg-green-100 border-green-300 hover:bg-green-200' 
-                : 'bg-white hover:bg-gray-50';
-            $textClass = $hasPractice ? 'text-green-800 font-medium' : 'text-gray-700';
+            $fecha = \Carbon\Carbon::parse($fechaActual);
+            $startDay = $fecha->firstOfMonth()->dayOfWeekIso - 1;
+            $daysInMonth = $fecha->daysInMonth;
+            $today = now()->format('Y-m-d');
+            $currentMonthYear = $fecha->format('Y-m');
         @endphp
         
-        <div 
-            wire:click="seleccionarFecha('{{ $currentDate }}')"
-            class="h-12 border p-1 cursor-pointer transition-colors relative
-                   {{ $dayClass }}
-                   {{ $isToday ? 'border-blue-500 border-2' : '' }}
-                   {{ $fecha->format('Y-m') !== now()->format('Y-m') ? 'opacity-80' : '' }}"
-        >
-            <div class="flex justify-between {{ $textClass }}">
-                <span>{{ $day }}</span>
+        @for($i = 0; $i < $startDay; $i++)
+            <div class="h-12 border"></div>
+        @endfor
+        
+        @for($day = 1; $day <= $daysInMonth; $day++)
+            @php
+                $currentDate = $currentMonthYear . '-' . str_pad($day, 2, '0', STR_PAD_LEFT);
+                $hasPractice = isset($practicas[$currentDate]);
+                $isToday = $currentDate === $today;
+                $dayClass = $hasPractice 
+                    ? 'bg-green-100 border-green-300 hover:bg-green-200' 
+                    : 'bg-white hover:bg-gray-50';
+                $textClass = $hasPractice ? 'text-green-800 font-medium' : 'text-gray-700';
+            @endphp
+            
+            <div 
+                wire:click="seleccionarFecha('{{ $currentDate }}')"
+                class="h-12 border p-1 cursor-pointer transition-colors relative
+                       {{ $dayClass }}
+                       {{ $isToday ? 'border-blue-500 border-2' : '' }}
+                       {{ $fecha->format('Y-m') !== now()->format('Y-m') ? 'opacity-80' : '' }}"
+            >
+                <div class="flex justify-between {{ $textClass }}">
+                    <span>{{ $day }}</span>
+                    @if($hasPractice)
+                        <span class="text-xs">
+                            <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4 text-green-600" viewBox="0 0 20 20" fill="currentColor">
+                                <path fill-rule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clip-rule="evenodd" />
+                            </svg>
+                        </span>
+                    @endif
+                </div>
                 @if($hasPractice)
-                    <span class="text-xs">
-                        <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4 text-green-600" viewBox="0 0 20 20" fill="currentColor">
-                            <path fill-rule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clip-rule="evenodd" />
-                        </svg>
-                    </span>
+                    <div class="text-xs truncate mt-1 {{ $textClass }}">
+                        {{ Str::limit($practicas[$currentDate]->actividad, 15) }}
+                    </div>
                 @endif
             </div>
-            @if($hasPractice)
-                <div class="text-xs truncate mt-1 {{ $textClass }}">
-                    {{ Str::limit($practicas[$currentDate]->actividad, 15) }}
-                </div>
-            @endif
-        </div>
-    @endfor
-</div>
+        @endfor
+    </div>
     
     <!-- Modal -->
     @if($showModal)
@@ -103,6 +103,7 @@
                 </h3>
                 
                 <form wire:submit.prevent="guardarPractica">
+                    @csrf
                     <div class="mb-4">
                         <label class="block text-sm font-medium mb-1">Actividad realizada</label>
                         <input type="text" wire:model="actividad" class="w-full px-3 py-2 border rounded">
@@ -149,3 +150,19 @@
         </div>
     @endif
 </div>
+@script
+<script>
+    document.addEventListener('livewire:initialized', () => {
+        // Actualizar cuando se guarda o elimina una práctica
+        Livewire.on('practica-actualizada', () => {
+            // Forzar actualización del componente
+            Livewire.dispatch('refresh');
+        });
+        
+        // Manejar cambios de mes
+        Livewire.on('mes-cambiado', () => {
+            Livewire.dispatch('refresh');
+        });
+    });
+</script>
+@endscript

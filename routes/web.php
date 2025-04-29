@@ -20,12 +20,16 @@ Route::middleware('auth')->group(function () {
     Route::delete('/profile', [ProfileController::class, 'destroy'])->name('profile.destroy');
 });
 
-Route::middleware(['auth', 'role:alumno'])->prefix('alumno')->group(function () {
+//ALUMNO RUTAS:
+Route::middleware(['auth', 'role:alumno'])->prefix('alumno')->name('alumno.')->group(function () {
     Route::get('/dashboard', function () {
         return view('alumno.dashboard');
-    })->name('alumno.dashboard');
+    })->name('dashboard');
+    
+    Route::get('/datos', [AlumnoController::class, 'datos'])->name('datos'); // Mejor usando controlador
 });
 
+//PROFESOR RUTAS:
 Route::middleware(['auth', 'role:profesor'])->prefix('profesor')->name('profesor.')->group(function () {
     Route::get('/dashboard', function(){
         return view('profe.dashboard');

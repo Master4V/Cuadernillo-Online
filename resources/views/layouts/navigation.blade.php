@@ -24,6 +24,14 @@
                            @endif-->
                             {{ __('Home') }}
                     </x-nav-link>
+                
+                    <!-- Nuevo: Enlace Datos - Solo para alumnos -->
+                    @if(auth()->user()->role === 'alumno')
+                        <x-nav-link :href="route('alumno.datos')" :active="request()->routeIs('alumno.datos')">
+                            {{ __('Mis Datos') }}
+                        </x-nav-link>
+                    @endif
+                    
                 </div>
                 @endauth
             </div>
@@ -90,7 +98,11 @@
                 <div class="font-medium text-base text-gray-800">{{ Auth::user()->name }}</div>
                 <div class="font-medium text-sm text-gray-500">{{ Auth::user()->email }}</div>
             </div>
-
+            @if(auth()->user()->role === 'alumno')
+            <x-responsive-nav-link :href="route('alumno.datos')" :active="request()->routeIs('alumno.datos')">
+                {{ __('Mis Datos') }}
+            </x-responsive-nav-link>
+        @endif
             <div class="mt-3 space-y-1">
                 <x-responsive-nav-link :href="route('profile.edit')">
                     {{ __('Profile') }}
@@ -106,6 +118,7 @@
                     </x-responsive-nav-link>
                 </form>
             </div>
+            
         </div>
         @endauth
     </div>
