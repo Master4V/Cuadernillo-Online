@@ -50,33 +50,18 @@
             <h4 class="font-medium text-gray-900 mb-3">Detalle por Semanas</h4>
             <div class="space-y-4">
                 @foreach($semanas as $semana)
-                    @php
-                        $diasLectivosSemana = 0;
-                        $dia = $semana['inicio']->copy();
-                        while ($dia <= $semana['fin']) {
-                            if (!$dia->isWeekend() && $dia->format('Y-m') === $mesSeleccionado) {
-                                $diasLectivosSemana++;
-                            }
-                            $dia->addDay();
-                        }
-
-                        $diasRegistradosSemana = auth()->user()->practicas()
-                            ->whereNull('deleted_at')
-                            ->whereBetween('fecha', [$semana['inicio'], $semana['fin']])
-                            ->whereRaw('DAYOFWEEK(fecha) NOT IN (1,7)')
-                            ->distinct('fecha')
-                            ->count('fecha');
-                    @endphp
-
                     <div class="{{ $semana['esSemanaActual'] ? 'bg-yellow-50 border-l-4 border-yellow-400' : 'bg-gray-50' }} p-3 rounded">
                         <div class="flex justify-between items-center">
                             <span class="text-sm font-medium">
-                                Semana {{ $semana['numero'] }} ({{ $semana['inicio']->format('d/m') }} - {{ $semana['fin']->format('d/m') }})
+                                Semana {{ $semana['numero'] }} ({{ $semana['inicio_formatted'] }} - {{ $semana['fin_formatted'] }})
+                                @if($semana['esSemanaDividida'])
+                                    <span class="text-xs text-gray-500 ml-1">(semana dividida)</span>
+                                @endif
                             </span>
                             <span class="text-xs px-2 py-1 rounded-full 
-                                {{ $diasRegistradosSemana === $diasLectivosSemana ? 'bg-green-100 text-green-800' : 
-                                   ($diasRegistradosSemana > 0 ? 'bg-blue-100 text-blue-800' : 'bg-gray-100 text-gray-800') }}">
-                                {{ $diasRegistradosSemana }}/{{ $diasLectivosSemana }} días
+                                {{ $semana['dias_registrados'] === $semana['dias_lectivos'] ? 'bg-green-100 text-green-800' : 
+                                   ($semana['dias_registrados'] > 0 ? 'bg-blue-100 text-blue-800' : 'bg-gray-100 text-gray-800') }}">
+                                {{ $semana['dias_registrados'] }}/{{ $semana['dias_lectivos'] }} días
                             </span>
                         </div>
                         @if($semana['esSemanaActual'])
@@ -85,6 +70,7 @@
                     </div>
                 @endforeach
             </div>
+        </div>
         </div>
     </div>
 </div>

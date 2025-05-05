@@ -32,7 +32,7 @@ Route::middleware(['auth', 'role:alumno'])->prefix('alumno')->name('alumno.')->g
 //PROFESOR RUTAS:
 Route::middleware(['auth', 'role:profesor'])->prefix('profesor')->name('profesor.')->group(function () {
     Route::get('/dashboard', function(){
-        return view('profe.dashboard');
+        return view('profesor.dashboard');
     })->name('dashboard');
 });
 

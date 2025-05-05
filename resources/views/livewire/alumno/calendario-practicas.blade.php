@@ -1,5 +1,4 @@
 <div>
-    <!-- Mostrar mensajes flash -->
     @if(session('message'))
         <div class="bg-green-100 border border-green-400 text-green-700 px-4 py-3 rounded relative mb-4" role="alert">
             <span class="block sm:inline">{{ session('message') }}</span>
@@ -110,10 +109,74 @@
                         @error('actividad') <span class="text-red-500 text-xs">{{ $message }}</span> @enderror
                     </div>
                     
-                    <div class="mb-4">
-                        <label class="block text-sm font-medium mb-1">Horas</label>
-                        <input type="number" wire:model="horas" min="1" class="w-full px-3 py-2 border rounded">
+                    <div class="mb-4" x-data="{ mostrarCalculadora: false }">
+                        <label class="block text-sm font-medium mb-1">Horas trabajadas</label>
+                        <div class="flex gap-2">
+                            <input 
+                                type="number"
+                                step="0.5"
+                                min="0.5"
+                                max="12"
+                                wire:model="horas"
+                                class="w-full px-3 py-2 border rounded"
+                                placeholder="Ej: 4.5"
+                                x-bind:readonly="mostrarCalculadora"
+                                wire:key="horas-input-{{ now()->timestamp }}"
+                            >
+                            <button 
+                                type="button" 
+                                @click="mostrarCalculadora = !mostrarCalculadora"
+                                class="px-3 py-2 border rounded hover:bg-gray-100"
+                            >
+                                <svg class="w-5 h-5 text-gray-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"/>
+                                </svg>
+                            </button>
+                        </div>
                         @error('horas') <span class="text-red-500 text-xs">{{ $message }}</span> @enderror
+                    
+                        <!-- Calculadora de horas -->
+                        <div x-show="mostrarCalculadora" x-cloak class="mt-2 p-4 border rounded-lg bg-gray-50">
+                            <div class="grid grid-cols-2 gap-4 mb-4">
+                                <div>
+                                    <label class="block text-sm text-gray-600 mb-1">Hora inicio</label>
+                                    <input 
+                                        type="time" 
+                                        wire:model.live="hora_inicio"
+                                        wire:change="calcularHoras"
+                                        class="w-full px-3 py-2 border rounded text-sm"
+                                    >
+                                    @error('hora_inicio') <span class="text-red-500 text-xs">{{ $message }}</span> @enderror
+                                </div>
+                                <div>
+                                    <label class="block text-sm text-gray-600 mb-1">Hora fin</label>
+                                    <input 
+                                        type="time" 
+                                        wire:model.live="hora_fin"
+                                        wire:change="calcularHoras"
+                                        class="w-full px-3 py-2 border rounded text-sm"
+                                    >
+                                    @error('hora_fin') <span class="text-red-500 text-xs">{{ $message }}</span> @enderror
+                                </div>
+                            </div>
+                            <div class="flex justify-end gap-2">
+                                <button 
+                                    type="button" 
+                                    @click="mostrarCalculadora = false" 
+                                    class="px-3 py-1 text-sm text-gray-600 hover:bg-gray-100 rounded"
+                                >
+                                    Cancelar
+                                </button>
+                                <button 
+                                    type="button" 
+                                    wire:click="calcularHoras"
+                                    @click="mostrarCalculadora = false"
+                                    class="px-3 py-1 text-sm bg-blue-600 text-white rounded hover:bg-blue-700"
+                                >
+                                    Calcular
+                                </button>
+                            </div>
+                        </div>
                     </div>
                     
                     <div class="mb-4">
@@ -130,7 +193,7 @@
                                 Eliminar
                             </button>
                         @else
-                            <div></div> <!-- Espaciador -->
+                            <div></div>
                         @endif
                         
                         <div class="flex space-x-2">
@@ -152,17 +215,12 @@
 </div>
 @script
 <script>
-    document.addEventListener('livewire:initialized', () => {
-        // Actualizar cuando se guarda o elimina una práctica
-        Livewire.on('practica-actualizada', () => {
-            // Forzar actualización del componente
-            Livewire.dispatch('refresh');
-        });
-        
-        // Manejar cambios de mes
-        Livewire.on('mes-cambiado', () => {
-            Livewire.dispatch('refresh');
-        });
+document.addEventListener('livewire:initialized', () => {
+    // Listener simplificado para horas calculadas
+    Livewire.on('horas-calculadas', () => {
+        // No necesitamos manipular el DOM directamente, Livewire se encarga
+        console.log('Horas calculadas:', @this.horas);
     });
+});
 </script>
 @endscript

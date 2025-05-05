@@ -8,6 +8,6 @@ class ProfeController extends Controller
 {
     public function dashboard()
     {
-        return view('profe.dashboard');
+        return view('profesor.dashboard');
     }
 }

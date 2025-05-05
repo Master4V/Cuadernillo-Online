@@ -6,35 +6,29 @@ use Illuminate\Support\Facades\Schema;
 
 return new class extends Migration
 {
-    /**
-     * Run the migrations.
-     */
     public function up(): void
     {
         Schema::create('grupos', function (Blueprint $table) {
             $table->id();
             $table->unsignedBigInteger('profesor_id');
             $table->unsignedBigInteger('alumno_id');
+            $table->string('centro_docente')->nullable();
             $table->string('nombre_profesor_practicas')->nullable();
             $table->string('empresa_practicas')->nullable();
-            $table->string('monitor_empresa')->nullable();
-            $table->string('grado_estudiante')->nullable();
+            $table->string('tutor_empresa')->nullable();
+            $table->string('periodo_realizacion')->nullable();
             $table->string('curso_academico')->nullable();
+            $table->string('familia_profesional')->nullable();
+            $table->string('ciclo')->nullable();
+            $table->string('grado')->nullable();
             $table->timestamps();
             $table->softDeletes();
 
-            // Claves foráneas
             $table->foreign('profesor_id')->references('id')->on('users')->onDelete('cascade');
             $table->foreign('alumno_id')->references('id')->on('users')->onDelete('cascade');
-    
-            // Asegurar que un alumno solo pertenece a un grupo
-            $table->unique(['alumno_id']);
         });
     }
 
-    /**
-     * Reverse the migrations.
-     */
     public function down(): void
     {
         Schema::dropIfExists('grupos');

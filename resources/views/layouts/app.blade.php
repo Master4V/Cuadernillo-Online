@@ -11,15 +11,9 @@
         <link rel="preconnect" href="https://fonts.bunny.net">
         <link href="https://fonts.bunny.net/css?family=figtree:400,500,600&display=swap" rel="stylesheet" />
 
-        <!-- Scripts -->
+        <!-- CSS y Livewire -->
         @vite(['resources/css/app.css', 'resources/js/app.js'])
         @livewireStyles
-        
-        <script src="https://cdn.jsdelivr.net/npm/alpinejs@3.x.x/dist/cdn.min.js" defer></script>
-        <link href="{{ asset('css/app.css') }}" rel="stylesheet">
-        
-        <script src="//unpkg.com/alpinejs" defer></script>
-        @livewireScripts
     </head>
     <body class="font-sans antialiased">
         <div class="min-h-screen bg-gray-100">
@@ -39,6 +33,9 @@
                 {{ $slot }}
             </main>
         </div>
+
+        <!-- Scripts -->
         @livewireScripts
+        <script src="https://cdn.jsdelivr.net/npm/flowbite@1.6.5/dist/flowbite.min.js"></script>
     </body>
 </html>

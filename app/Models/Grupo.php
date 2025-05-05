@@ -12,20 +12,22 @@ class Grupo extends Model
     protected $fillable = [
         'profesor_id',
         'alumno_id',
+        'centro_docente',
         'nombre_profesor_practicas',
         'empresa_practicas',
-        'monitor_empresa',
-        'grado_estudiante',
-        'curso_academico'
+        'tutor_empresa',
+        'periodo_realizacion',
+        'curso_academico',
+        'familia_profesional',
+        'ciclo',
+        'grado'
     ];
 
-    // Relación con el profesor
     public function profesor()
     {
         return $this->belongsTo(User::class, 'profesor_id');
     }
 
-    // Relación con el alumno
     public function alumno()
     {
         return $this->belongsTo(User::class, 'alumno_id');

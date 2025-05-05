@@ -6,6 +6,7 @@ use Livewire\Component;
 use App\Models\Practica;
 use Illuminate\Support\Facades\Auth;
 use Carbon\Carbon;
+use Illuminate\Support\Facades\Log;
 
 class CalendarioPracticas extends Component
 {
@@ -18,19 +19,23 @@ class CalendarioPracticas extends Component
     public $mostrarDatepicker = false;
     public $practicaExistente = false;
     public $practicas = [];
-    
+    public $hora_inicio;
+    public $hora_fin;
+
     protected $rules = [
         'actividad' => 'required|min:3',
-        'horas' => 'required|numeric|min:1',
+        'horas' => 'required|numeric|min:0.5|max:12',
         'observaciones' => 'nullable|string',
+        'hora_inicio' => 'nullable|date_format:H:i',
+        'hora_fin' => 'nullable|date_format:H:i|after:hora_inicio',
     ];
-    
+
     public function mount()
     {
         $this->fechaActual = now()->format('Y-m-d');
         $this->cargarPracticas();
     }
-    
+
     public function cargarPracticas()
     {
         $this->practicas = Practica::where('user_id', Auth::id())
@@ -41,82 +46,137 @@ class CalendarioPracticas extends Component
                 return Carbon::parse($item->fecha)->format('Y-m-d');
             });
     }
-    
+
     public function mesAnterior()
     {
         $this->fechaActual = Carbon::parse($this->fechaActual)->subMonth()->format('Y-m-d');
         $this->cargarPracticas();
-        $this->dispatch('mes-cambiado'); // Emitir evento
+        $this->dispatch('mes-cambiado');
     }
-    
+
     public function mesSiguiente()
     {
         $this->fechaActual = Carbon::parse($this->fechaActual)->addMonth()->format('Y-m-d');
         $this->cargarPracticas();
-        $this->dispatch('mes-cambiado'); // Emitir evento
+        $this->dispatch('mes-cambiado');
     }
-    
+
     public function actualizarFecha()
     {
         $this->mostrarDatepicker = false;
         $this->cargarPracticas();
     }
-    
+
     public function seleccionarFecha($fecha)
     {
         $this->fechaSeleccionada = $fecha;
-        
+
         $practica = Practica::where('user_id', Auth::id())
-                            ->where('fecha', $fecha)
-                            ->first();
-        
-        if($practica) {
+            ->where('fecha', $fecha)
+            ->first();
+
+        if ($practica) {
             $this->actividad = $practica->actividad;
             $this->horas = $practica->horas;
             $this->observaciones = $practica->observaciones;
+            $this->hora_inicio = $practica->hora_inicio;
+            $this->hora_fin = $practica->hora_fin;
             $this->practicaExistente = true;
         } else {
-            $this->reset(['actividad', 'horas', 'observaciones']);
+            $this->reset(['actividad', 'horas', 'observaciones', 'hora_inicio', 'hora_fin']);
             $this->practicaExistente = false;
         }
-        
+
         $this->showModal = true;
     }
-    
-    public function guardarPractica()
-{
-    $this->validate();
-    
-    Practica::updateOrCreate(
-        [
-            'user_id' => Auth::id(),
-            'fecha' => $this->fechaSeleccionada,
-        ],
-        [
-            'actividad' => $this->actividad,
-            'horas' => $this->horas,
-            'observaciones' => $this->observaciones,
-        ]
-    );
-    
-    $this->showModal = false;
-    $this->cargarPracticas(); // Actualizar prácticas inmediatamente
-    $this->dispatch('practica-actualizada'); // Nuevo evento
-    session()->flash('message', 'Práctica guardada correctamente');
-}
 
-public function eliminarPractica()
-{
-    Practica::where('user_id', Auth::id())
+    public function calcularHoras()
+    {
+        $this->validate([
+            'hora_inicio' => 'required|date_format:H:i',
+            'hora_fin' => 'required|date_format:H:i',
+        ]);
+
+        try {
+            $inicio = Carbon::createFromFormat('H:i', $this->hora_inicio);
+            $fin = Carbon::createFromFormat('H:i', $this->hora_fin);
+
+            if ($fin->lessThan($inicio)) {
+                $fin->addDay();
+            }
+
+            $diferenciaMinutos = $fin->diffInMinutes($inicio);
+            $this->horas = round((abs($diferenciaMinutos) / 60) * 2) / 2;
+
+            if ($this->horas > 12) {
+                $this->horas = 12;
+                $this->dispatch(
+                    'notify',
+                    message: 'Se ha limitado a 12 horas máximo por día.',
+                    type: 'warning'
+                );
+            }
+
+            $this->dispatch('horas-calculadas');
+        } catch (\Exception $e) {
+            $this->dispatch(
+                'notify',
+                message: 'Error al calcular las horas. Verifica el formato (HH:MM).',
+                type: 'error'
+            );
+        }
+    }
+
+
+
+    public function guardarPractica()
+    {
+        $this->validate();
+
+        // Depuración: Mostrar datos antes de guardar
+        logger()->info('Guardando práctica', [
+            'fecha' => $this->fechaSeleccionada,
+            'horas' => $this->horas,
+            'hora_inicio' => $this->hora_inicio,
+            'hora_fin' => $this->hora_fin
+        ]);
+
+        Practica::updateOrCreate(
+            [
+                'user_id' => Auth::id(),
+                'fecha' => $this->fechaSeleccionada,
+            ],
+            [
+                'actividad' => $this->actividad,
+                'horas' => $this->horas,
+                'observaciones' => $this->observaciones,
+                'hora_inicio' => $this->hora_inicio,
+                'hora_fin' => $this->hora_fin,
+            ]
+        );
+
+        $this->showModal = false;
+        $this->cargarPracticas();
+        $this->dispatch('practica-guardada');
+        $this->dispatch(
+            'notify',
+            message: 'Práctica guardada correctamente',
+            type: 'success'
+        );
+    }
+
+    public function eliminarPractica()
+    {
+        Practica::where('user_id', Auth::id())
             ->where('fecha', $this->fechaSeleccionada)
             ->delete();
-    
-    $this->showModal = false;
-    $this->cargarPracticas(); // Actualizar prácticas inmediatamente
-    $this->dispatch('practica-actualizada'); // Nuevo evento
-    session()->flash('message', 'Práctica eliminada correctamente');
-}
-    
+
+        $this->showModal = false;
+        $this->cargarPracticas();
+        $this->dispatch('practica-actualizada');
+        session()->flash('message', 'Práctica eliminada correctamente');
+    }
+
     public function render()
     {
         return view('livewire.alumno.calendario-practicas');
