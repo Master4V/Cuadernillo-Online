@@ -318,7 +318,7 @@ class DatosGrupo extends Component
 
         if ($grupo) {
             $this->centro_docente = $grupo->centro_docente;
-            $this->nombre_profesor_practicas = $grupo->nombre_profesor_practicas;
+            //$this->nombre_profesor_practicas = $grupo->nombre_profesor_practicas;
             $this->empresa_practicas = $grupo->empresa_practicas;
             $this->tutor_empresa = $grupo->tutor_empresa;
             $this->periodo_realizacion = $grupo->periodo_realizacion;
@@ -326,6 +326,10 @@ class DatosGrupo extends Component
             $this->familia_profesional = $grupo->familia_profesional;
             $this->ciclo = $grupo->ciclo;
             $this->grado = $grupo->grado;
+
+            if (empty($this->nombre_profesor_practicas)) {
+                $this->nombre_profesor_practicas = $grupo->profesor?->name;
+            }
         }
     }
 

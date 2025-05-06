@@ -14,80 +14,90 @@ class GestionGrupo extends Component
 
     public $search = '';
     public $showAsignados = false;
+    protected string $paginationTheme = 'tailwind';
+
+    protected $listeners = ['alumnoActualizado' => 'actualizarDatos'];
 
     public function render()
-{
-    $profesorId = Auth::id();
-    $cursoActual = date('Y') . '/' . (date('Y') + 1);
+    {
+        $profesorId = Auth::id();
+        $cursoActual = date('Y') . '/' . (date('Y') + 1);
 
-    // Todos los alumnos asignados en el curso actual (sin importar profesor)
-    $alumnosAsignados = Grupo::where('curso_academico', $cursoActual)
-                             ->pluck('alumno_id')
-                             ->toArray();
+        $alumnos = $this->getAlumnosQuery($profesorId, $cursoActual)
+                      ->paginate(10);
 
-    // Alumnos asignados a este profesor
-    $asignadosAlProfesor = Grupo::where('profesor_id', $profesorId)
-                                ->where('curso_academico', $cursoActual)
-                                ->pluck('alumno_id')
-                                ->toArray();
+        $totalAsignados = Grupo::where('profesor_id', $profesorId)
+                             ->where('curso_academico', $cursoActual)
+                             ->count();
 
-    // Base query
-    $alumnosQuery = User::where('role', 'alumno')
-                        ->when($this->search, function($q) {
-                            return $q->where(function ($query) {
-                                $query->where('name', 'like', '%' . $this->search . '%')
-                                      ->orWhere('email', 'like', '%' . $this->search . '%');
-                            });
-                        });
-
-    // Mostrar alumnos asignados al profesor o los que no tienen ningún grupo
-    if ($this->showAsignados) {
-        $alumnosQuery->whereIn('id', $asignadosAlProfesor);
-    } else {
-        $alumnosQuery->whereNotIn('id', $alumnosAsignados);
+        return view('livewire.profesor.gestion-grupo', [
+            'alumnos' => $alumnos,
+            'totalAsignados' => $totalAsignados
+        ]);
     }
 
-    $alumnos = $alumnosQuery->paginate(10);
-
-    return view('livewire.profesor.gestion-grupo', [
-        'alumnos' => $alumnos,
-        'totalAsignados' => count($asignadosAlProfesor)
-    ]);
+    protected function getAlumnosQuery($profesorId, $cursoActual)
+{
+    return User::where('role', 'alumno')
+        ->when($this->search, function($q) {
+            return $q->where(function($query) {
+                $query->where('name', 'like', '%'.$this->search.'%')
+                      ->orWhere('email', 'like', '%'.$this->search.'%');
+            });
+        })
+        ->when($this->showAsignados, function($q) use ($profesorId, $cursoActual) {
+            return $q->whereHas('grupoComoAlumno', function($query) use ($profesorId, $cursoActual) {
+                $query->where('profesor_id', $profesorId)
+                      ->where('curso_academico', $cursoActual);
+            });
+        }, function($q) use ($cursoActual) {
+            return $q->whereDoesntHave('grupoComoAlumno', function($query) use ($cursoActual) {
+                $query->where('curso_academico', $cursoActual);
+            });
+        })
+        ->orderBy('name'); // Asegura un orden estable
 }
 
 
     public function toggleAsignacion($alumnoId)
-{
-    $profesorId = Auth::id();
+    {
+        $profesorId = Auth::id();
+        $cursoActual = date('Y') . '/' . (date('Y') + 1);
 
-    // Verificar si el alumno ya está asignado a este profesor
-    $grupo = Grupo::where('profesor_id', $profesorId)
+        $grupo = Grupo::where('profesor_id', $profesorId)
                   ->where('alumno_id', $alumnoId)
                   ->first();
 
-    if ($grupo) {
-        // Ya está asignado → lo quitamos
-        $grupo->delete();
+        if ($grupo) {
+            $grupo->delete();
+            $message = 'Alumno eliminado del grupo';
+        } else {
+            Grupo::create([
+                'profesor_id' => $profesorId,
+                'alumno_id' => $alumnoId,
+                'curso_academico' => $cursoActual
+            ]);
+            $message = 'Alumno añadido al grupo';
+        }
 
-        $this->dispatch('notify', ['type' => 'success', 'message' => 'Alumno eliminado del grupo']);
-    } else {
-        // No está asignado → lo añadimos
-        Grupo::create([
-            'profesor_id' => $profesorId,
-            'alumno_id' => $alumnoId,
-            'curso_academico' => date('Y') . '/' . (date('Y') + 1)
-        ]);
-
-        $this->dispatch('notify', ['type' => 'success', 'message' => 'Alumno añadido al grupo']);
+        $this->dispatch('alumnoActualizado')->to(ProgresoAlumnos::class);
+        $this->dispatch('notify', 
+            type: 'success', 
+            message: $message
+        );
+        
+        // Forzar recarga sin usar caché
+        $this->render();
     }
 
-    $this->resetPage(); // Para refrescar el listado
-}
-
+    public function actualizarDatos()
+    {
+        $this->render();
+    }
 
     public function toggleVista()
     {
         $this->showAsignados = !$this->showAsignados;
-        $this->resetPage();
+        $this->resetPage(); // Esto ahora funcionará correctamente
     }
 }

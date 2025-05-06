@@ -35,13 +35,15 @@
                         <!-- Columna principal (Progreso de Alumnos) -->
                         <div class="flex-1" style="flex: 0 0 70%;">
                             <h3 class="text-lg font-semibold text-gray-800 mb-4">Progreso de Alumnos</h3>
-                            <livewire:profesor.progreso-alumnos />
+                            <livewire:profesor.progreso-alumnos 
+                                :key="'progreso-'.now()->timestamp" />
                         </div>
-
+                        
                         <!-- Columna secundaria (Gestión de Grupo) -->
                         <div class="w-1/3" style="flex: 0 0 30%;">
                             <h3 class="text-lg font-semibold text-gray-800 mb-4">Gestión de Grupo</h3>
-                            <livewire:profesor.gestion-grupo />
+                            <livewire:profesor.gestion-grupo 
+                                :key="'gestion-'.now()->timestamp" />
                         </div>
                     </div>
                 </div>

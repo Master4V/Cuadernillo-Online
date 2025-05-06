@@ -32,7 +32,7 @@
             </thead>
             <tbody class="bg-white divide-y divide-gray-200">
                 @forelse ($alumnos as $alumno)
-                    <tr>
+                    <tr wire:key="alumno-{{ $alumno->id }}">
                         <td class="px-6 py-4 whitespace-nowrap">
                             <div class="text-sm font-medium text-gray-900">{{ $alumno->name }}</div>
                             <div class="text-sm text-gray-500">{{ $alumno->email }}</div>
@@ -54,11 +54,12 @@
                     </tr>
                 @endforelse
             </tbody>
+            
         </table>
     </div>
 
     <div class="mt-4">
-        {{ $alumnos->links() }}
+        {{ $alumnos->links('vendor.livewire.custom-pagination') }}
     </div>
 </div>
 

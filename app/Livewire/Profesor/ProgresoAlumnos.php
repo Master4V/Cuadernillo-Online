@@ -20,6 +20,8 @@ class ProgresoAlumnos extends Component
     ];
     public $anos;
 
+    protected $listeners = ['alumnoActualizado' => 'actualizarDatos'];
+
     public function mount()
     {
         $this->mesSeleccionado = now()->month;
@@ -32,7 +34,6 @@ class ProgresoAlumnos extends Component
         $profesorId = Auth::id();
         $totalDiasLectivos = $this->calcularDiasLectivos();
         
-        // Obtener alumnos asignados al profesor
         $alumnos = User::whereHas('grupoComoAlumno', function($query) use ($profesorId) {
                         $query->where('profesor_id', $profesorId);
                     })
@@ -44,37 +45,52 @@ class ProgresoAlumnos extends Component
                     ->map(function($alumno) use ($totalDiasLectivos) {
                         return $this->calcularProgreso($alumno, $totalDiasLectivos);
                     });
-        
+
         return view('livewire.profesor.progreso-alumnos', [
             'alumnos' => $alumnos,
             'totalDiasLectivos' => $totalDiasLectivos
         ]);
     }
 
+    public function actualizarDatos()
+    {
+        $this->render();
+    }
+
     private function calcularProgreso($alumno, $totalDiasLectivos)
     {
-        // Filtrar prácticas que son en días lectivos (L-V)
-        $diasConRegistro = $alumno->practicas
-            ->filter(function($practica) {
-                $fecha = Carbon::parse($practica->fecha);
-                return $fecha->isWeekday(); // Lunes a Viernes
-            })
-            ->unique('fecha')
-            ->count();
-        
-        $progreso = $totalDiasLectivos > 0 
-            ? round(($diasConRegistro / $totalDiasLectivos) * 100, 2)
-            : 0;
+        try {
+            $diasConRegistro = $alumno->practicas
+                ->filter(function($practica) {
+                    return Carbon::parse($practica->fecha)->isWeekday();
+                })
+                ->unique('fecha')
+                ->count();
             
-        return (object)[
-            'id' => $alumno->id,
-            'name' => $alumno->name,
-            'email' => $alumno->email,
-            'progreso' => $progreso,
-            'diasRegistrados' => $diasConRegistro,
-            'totalDias' => $totalDiasLectivos,
-            'practicas' => $alumno->practicas
-        ];
+            $progreso = $totalDiasLectivos > 0 
+                ? round(($diasConRegistro / $totalDiasLectivos) * 100, 2)
+                : 0;
+                
+            return (object)[
+                'id' => $alumno->id,
+                'name' => $alumno->name,
+                'email' => $alumno->email,
+                'progreso' => min(100, $progreso),
+                'diasRegistrados' => $diasConRegistro,
+                'totalDias' => $totalDiasLectivos,
+                'practicas' => $alumno->practicas
+            ];
+        } catch (\Exception $e) {
+            return (object)[
+                'id' => $alumno->id,
+                'name' => $alumno->name,
+                'email' => $alumno->email,
+                'progreso' => 0,
+                'diasRegistrados' => 0,
+                'totalDias' => $totalDiasLectivos,
+                'practicas' => collect()
+            ];
+        }
     }
 
     private function calcularDiasLectivos()
