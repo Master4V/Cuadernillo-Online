@@ -55,7 +55,7 @@ class AuthenticatedSessionController extends Controller
             case 'profesor':
                 return redirect()->intended(route('profesor.dashboard'));
             default:
-                return redirect()->intended(RouteServiceProvider::HOME);
+            return redirect()->intended(RouteServiceProvider::class)->redirectTo(); // return redirect()->intended(app(\App\Providers\RouteServiceProvider::class)->redirectTo());
         }
     }
 

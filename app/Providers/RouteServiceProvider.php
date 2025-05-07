@@ -7,14 +7,27 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\RateLimiter;
 use Illuminate\Support\Facades\Route;
 use Illuminate\Foundation\Support\Providers\RouteServiceProvider as ServiceProvider;
+use Illuminate\Support\Facades\Auth;
 
 class RouteServiceProvider extends ServiceProvider
 {
     /**
      * Define your route model bindings, pattern filters, etc.
      */
-    public const HOME = '/dashboard'; // o tu ruta por defecto
+    //public const HOME = '/dashboard'; // o tu ruta por defecto
+    protected function redirectTo()
+    {
+        $user = Auth::user();
 
+        if ($user->hasRole('alumno')) {
+            return '/alumno/dashboard';
+        } elseif ($user->hasRole('profesor')) {
+            return '/profesor/dashboard';
+        }
+
+        return '/'; // fallback si no tiene rol válido
+    }
+    
     public function boot(): void
     {
         // En el método boot() de tu provider:

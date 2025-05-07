@@ -100,4 +100,9 @@ class GestionGrupo extends Component
         $this->showAsignados = !$this->showAsignados;
         $this->resetPage(); // Esto ahora funcionará correctamente
     }
+    public function searchUpdated()
+{
+    $this->render();
+}
+
 }
