@@ -25,6 +25,12 @@
                             {{ __('Mis Datos') }}
                         </x-nav-link>
                     @endif
+
+                    @if(auth()->user()->role ==='profesor')
+                        <x-nav-link :href="route('profesor.asignaciones')" :active="request()->routeIs('profesor.asignaciones')">
+                            {{ __('Asignar') }}
+                        </x-nav-link>
+                    @endif
                     
                 </div>
                 @endauth
@@ -35,7 +41,7 @@
                 @auth
                 <x-dropdown align="right" width="48">
                     <x-slot name="trigger">
-                        <button class="inline-flex items-center px-3 py-2 border border-transparent text-sm leading-4 font-medium rounded-md text-gray-500 bg-white hover:text-gray-700 focus:outline-none transition ease-in-out duration-150">
+                        <button class="inline-flex items-center px-3 py-2 border border-transparent text-sm leading-4 font-medium rounded-md text-gray-500 bg-white hover:text-yellow-700 focus:outline-none transition ease-in-out duration-150">
                             <div>{{ Auth::user()->name }}</div>
                             <div class="ms-1">
                                 <svg class="fill-current h-4 w-4" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20">
@@ -46,9 +52,10 @@
                     </x-slot>
 
                     <x-slot name="content">
-                        <x-dropdown-link :href="route('profile.edit')">
-                            {{ __('Perfil') }}
-                        </x-dropdown-link>
+                        <x-dropdown-link :href="route('profile.edit')" :active="request()->routeIs('profile.edit')">
+    {{ __('Perfil') }}
+</x-dropdown-link>
+
 
                         <!-- Authentication -->
                         <form method="POST" action="{{ route('logout') }}">
@@ -101,9 +108,10 @@
             </div>
 
             <div class="mt-3 space-y-1">
-                <x-responsive-nav-link :href="route('profile.edit')">
-                    {{ __('Perfil') }}
-                </x-responsive-nav-link>
+                <x-responsive-nav-link :href="route('profile.edit')" :active="request()->routeIs('profile.edit')">
+    {{ __('Perfil') }}
+</x-responsive-nav-link>
+
 
                 <!-- Authentication -->
                 <form method="POST" action="{{ route('logout') }}">

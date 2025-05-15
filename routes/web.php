@@ -1,7 +1,7 @@
 <?php
 
 use App\Http\Controllers\AlumnoController;
-use App\Http\Controllers\ProfeController;
+use App\Http\Controllers\ProfesorController;
 use App\Http\Controllers\ProfileController;
 use Illuminate\Support\Facades\Route;
 use SebastianBergmann\CodeCoverage\Report\Html\Dashboard;
@@ -26,7 +26,7 @@ Route::middleware(['auth', 'role:alumno'])->prefix('alumno')->name('alumno.')->g
         return view('alumno.dashboard');
     })->name('dashboard');
     
-    Route::get('/datos', [AlumnoController::class, 'datos'])->name('datos'); // Mejor usando controlador
+    Route::get('/datos', [AlumnoController::class, 'datos'])->name('datos');
 });
 
 //PROFESOR RUTAS:
@@ -34,6 +34,8 @@ Route::middleware(['auth', 'role:profesor'])->prefix('profesor')->name('profesor
     Route::get('/dashboard', function(){
         return view('profesor.dashboard');
     })->name('dashboard');
+
+    Route::get('/asignaciones',[ProfesorController::class, 'asignaciones'])->name('asignaciones');
 });
 
 require __DIR__.'/auth.php';

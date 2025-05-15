@@ -12,6 +12,7 @@ return new class extends Migration
             $table->id();
             $table->unsignedBigInteger('profesor_id');
             $table->unsignedBigInteger('alumno_id');
+            $table->unsignedBigInteger('empresa_id')->nullable();
             $table->string('centro_docente')->nullable();
             $table->string('nombre_profesor_practicas')->nullable();
             $table->string('empresa_practicas')->nullable();
@@ -26,6 +27,7 @@ return new class extends Migration
 
             $table->foreign('profesor_id')->references('id')->on('users')->onDelete('cascade');
             $table->foreign('alumno_id')->references('id')->on('users')->onDelete('cascade');
+            $table->foreign('empresa_id')->references('id')->on('empresas')->onDelete('set null');
         });
     }
 

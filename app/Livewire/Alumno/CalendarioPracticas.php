@@ -8,6 +8,7 @@ use Illuminate\Support\Facades\Auth;
 use Carbon\Carbon;
 use Illuminate\Support\Facades\Log;
 
+
 class CalendarioPracticas extends Component
 {
     public $fechaSeleccionada;
@@ -21,6 +22,7 @@ class CalendarioPracticas extends Component
     public $practicas = [];
     public $hora_inicio;
     public $hora_fin;
+    public $showDeleteModal = false;
 
     protected $rules = [
         'actividad' => 'required|min:3',
@@ -165,17 +167,27 @@ class CalendarioPracticas extends Component
         );
     }
 
-    public function eliminarPractica()
-    {
-        Practica::where('user_id', Auth::id())
-            ->where('fecha', $this->fechaSeleccionada)
-            ->delete();
+    public function confirmarEliminacion()
+{
+    $this->showDeleteModal = true;
+}
 
-        $this->showModal = false;
-        $this->cargarPracticas();
-        $this->dispatch('practica-actualizada');
-        session()->flash('message', 'Práctica eliminada correctamente');
-    }
+public function eliminarPractica()
+{
+    Practica::where('user_id', Auth::id())
+        ->where('fecha', $this->fechaSeleccionada)
+        ->delete();
+
+    $this->showModal = false;
+    $this->showDeleteModal = false;
+    $this->cargarPracticas();
+    $this->dispatch('practica-actualizada');
+    $this->dispatch(
+        'notify',
+        message: 'Práctica eliminada correctamente',
+        type: 'success'
+    );
+}
 
     public function render()
     {

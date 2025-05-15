@@ -39,7 +39,8 @@
             }
         </style>
     </head>
-    <body class="bg-gray-50 dark:bg-gray-900 text-gray-900 dark:text-gray-100 flex p-6 lg:p-8 items-center lg:justify-center min-h-screen flex-col relative">        <header class="w-full lg:max-w-4xl max-w-[335px] mb-6 not-has-[nav]:hidden">
+    <body class="bg-gray-50 dark:bg-gray-900 text-gray-900 dark:text-gray-100 flex p-6 lg:p-8 items-center lg:justify-center min-h-screen flex-col relative">        
+        <!--header class="w-full lg:max-w-4xl max-w-[335px] mb-6 not-has-[nav]:hidden">
             @if (Route::has('login'))
                 <nav class="flex items-center justify-end gap-4">
                     @auth
@@ -71,7 +72,7 @@
                     @endauth
                 </nav>
             @endif
-        </header>
+        </header-->
         <div class="flex items-center justify-center w-full transition-opacity opacity-100 duration-750 lg:grow starting:opacity-0">
             <main class="flex max-w-[335px] w-full flex-col-reverse lg:max-w-4xl lg:flex-row bg-white dark:bg-gray-800 rounded-lg shadow-xl overflow-hidden">
                 <!-- Div de animación de fondo ->

@@ -13,7 +13,10 @@ class GestionGrupo extends Component
     use WithPagination;
 
     public $search = '';
-    public $showAsignados = false;
+    public $showAsignados = true;
+    public $alumnoParaQuitar = null;
+    public $mostrarModal = false;
+    public $nombreAlumnoParaQuitar=null;
     protected string $paginationTheme = 'tailwind';
 
     protected $listeners = ['alumnoActualizado' => 'actualizarDatos'];
@@ -87,6 +90,32 @@ class GestionGrupo extends Component
         );
         
         // Forzar recarga sin usar caché
+        $this->render();
+    }
+
+    public function confirmarQuitar($alumnoId)
+    {
+        $this->alumnoParaQuitar = $alumnoId;
+        $this->nombreAlumnoParaQuitar = User::find($alumnoId)?->name;
+        $this->mostrarModal = true;
+    }
+
+    public function quitarAlumno()
+    {
+        $profesorId = Auth::id();
+        $alumnoId = $this->alumnoParaQuitar;
+
+        Grupo::where('profesor_id', $profesorId)
+            ->where('alumno_id', $alumnoId)
+            ->delete();
+
+        $this->mostrarModal = false;
+        $this->dispatch('alumnoActualizado')->to(ProgresoAlumnos::class);
+        $this->dispatch('notify', 
+            type: 'success', 
+            message: 'Alumno eliminado del grupo'
+        );
+        
         $this->render();
     }
 

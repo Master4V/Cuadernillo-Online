@@ -12,6 +12,7 @@ class Grupo extends Model
     protected $fillable = [
         'profesor_id',
         'alumno_id',
+        'empresa_id',
         'centro_docente',
         'nombre_profesor_practicas',
         'empresa_practicas',
@@ -31,5 +32,9 @@ class Grupo extends Model
     public function alumno()
     {
         return $this->belongsTo(User::class, 'alumno_id');
+    }
+
+    public function empresa(){
+        return $this->belongsTo(Empresa::class,'empresa_id');
     }
 }

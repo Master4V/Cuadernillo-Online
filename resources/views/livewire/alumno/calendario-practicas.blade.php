@@ -187,8 +187,7 @@
                     <div class="flex justify-between items-center">
                         @if($practicaExistente)
                             <button type="button" 
-                                    wire:click="eliminarPractica"
-                                    wire:confirm="¿Estás seguro de que quieres eliminar esta práctica?"
+                                    wire:click="confirmarEliminacion"
                                     class="px-4 py-2 bg-red-500 text-white rounded hover:bg-red-600">
                                 Eliminar
                             </button>
@@ -210,17 +209,31 @@
                     </div>
                 </form>
             </div>
+            @if($showDeleteModal)
+    <div class="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center p-4 z-50">
+        <div class="bg-white rounded-lg p-6 w-full max-w-sm">
+            <h3 class="text-lg font-medium mb-4">¿Eliminar práctica?</h3>
+            <p class="text-sm text-gray-600 mb-6">
+                ¿Estás seguro de que deseas eliminar la práctica del día {{ \Carbon\Carbon::parse($fechaSeleccionada)->format('d/m/Y') }}? Esta acción no se puede deshacer.
+            </p>
+            <div class="flex justify-end gap-3">
+                <button
+                    wire:click="$set('showDeleteModal', false)"
+                    class="px-4 py-2 text-sm text-gray-700 bg-gray-100 rounded hover:bg-gray-200"
+                >
+                    Cancelar
+                </button>
+                <button
+                    wire:click="eliminarPractica"
+                    class="px-4 py-2 text-sm text-white bg-red-600 rounded hover:bg-red-700"
+                >
+                    Eliminar
+                </button>
+            </div>
+        </div>
+    </div>
+@endif
+
         </div>
     @endif
 </div>
-@script
-<script>
-document.addEventListener('livewire:initialized', () => {
-    // Listener simplificado para horas calculadas
-    Livewire.on('horas-calculadas', () => {
-        // No necesitamos manipular el DOM directamente, Livewire se encarga
-        console.log('Horas calculadas:', @this.horas);
-    });
-});
-</script>
-@endscript

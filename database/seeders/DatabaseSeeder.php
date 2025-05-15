@@ -137,7 +137,7 @@ class DatabaseSeeder extends Seeder
             'password' => Hash::make('1234'),
             'role' => 'alumno',
         ]);
-
+/*
         //Grupos:
         Grupo::create([
             'profesor_id' => $profesor1->id,
@@ -258,7 +258,7 @@ class DatabaseSeeder extends Seeder
             'familia_profesional' => 'Informática y Comunicaciones',
             'ciclo' => 'Desarrollo de Aplicaciones Multiplataforma',
             'grado' => 'Grado Superior',
-        ]);
+        ]);*/
     }
 }
 
