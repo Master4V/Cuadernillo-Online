@@ -8,7 +8,6 @@ use App\Models\Grupo;
 use App\Models\Empresa;
 use App\Models\User;
 use Illuminate\Validation\Rule;
-use Illuminate\Support\Facades\Auth;
 
 class AsignarEmpresa extends Component
 {
@@ -37,17 +36,21 @@ class AsignarEmpresa extends Component
     public $showDeleteModal = false;
     public $grupoToDelete;
 
+    public $showEmpresasModal = false;
+    public $showAlumnosModal = false;
+
+    protected $listeners = ['registroGuardado' => 'actualizarDatos'];
+
+    public function actualizarDatos(){
+        $this->loadData();
+        $this->loadAlumnosDisponibles();
+    }
+
     public function mount()
     {
-        $this->loadData(); // Esto carga empresas y grupos
-
+        $this->loadData();
+        $this->loadAlumnosDisponibles(); // Usar el nuevo método
         $this->profesores = User::where('role', 'profesor')->get();
-        $this->alumnos = User::where('role', 'alumno')
-            ->whereDoesntHave('grupoComoAlumno')
-            ->orWhereHas('grupoComoAlumno', function ($q) {
-                $q->where('id', $this->grupoEditId);
-            })
-            ->get();
     }
 
 
@@ -66,6 +69,7 @@ class AsignarEmpresa extends Component
             'nuevoGrupo.empresa_id' => 'required|exists:empresas,id',
             'nuevoGrupo.profesor_id' => 'required|exists:users,id',
             'nuevoGrupo.centro_docente' => 'required|string',
+            'nuevoGrupo.tutor_empresa' => 'required|string',
             'nuevoGrupo.alumno_id' => [
                 'required',
                 'exists:users,id',
@@ -75,10 +79,8 @@ class AsignarEmpresa extends Component
 
         $this->validate($rules);
 
-        // Obtener datos relacionados
         $empresa = Empresa::find($this->nuevoGrupo['empresa_id']);
         $profesor = User::find($this->nuevoGrupo['profesor_id']);
-        $alumno = User::find($this->nuevoGrupo['alumno_id']);
 
         $data = [
             'empresa_id' => $this->nuevoGrupo['empresa_id'],
@@ -88,7 +90,6 @@ class AsignarEmpresa extends Component
             'tutor_empresa' => $this->nuevoGrupo['tutor_empresa'],
             'empresa_practicas' => $empresa?->nombre ?? '',
             'nombre_profesor_practicas' => $profesor?->name ?? '',
-            'nombre_alumno' => $alumno?->name ?? '', // Campo adicional si es necesario
         ];
 
         if ($this->isEditing) {
@@ -99,8 +100,24 @@ class AsignarEmpresa extends Component
             $message = 'Grupo creado exitosamente!';
         }
 
+        // Actualizar la lista de alumnos disponibles
+        $this->loadAlumnosDisponibles();
+
         $this->cerrarModal();
         session()->flash('success', $message);
+    }
+
+    public function loadAlumnosDisponibles()
+    {
+        $this->alumnos = User::where('role', 'alumno')
+            ->where(function ($query) {
+                $query->whereDoesntHave('grupoComoAlumno')
+                    ->orWhereHas('grupoComoAlumno', function ($q) {
+                        $q->where('id', $this->grupoEditId);
+                    });
+            })
+            ->orderBy('name')
+            ->get();
     }
 
     public function editarGrupo($grupoId)
@@ -120,19 +137,32 @@ class AsignarEmpresa extends Component
         $this->grupoEditId = $grupoId;
         $this->isEditing = true;
         $this->showCreateModal = true;
+        $this->loadAlumnosDisponibles();
     }
 
     public function cerrarModal()
     {
-        $this->reset(['nuevoGrupo', 'showCreateModal', 'isEditing', 'grupoEditId']);
+        $this->reset([
+            'nuevoGrupo',
+            'showCreateModal',
+            'showEmpresasModal',
+            'showAlumnosModal',
+            'isEditing',
+            'grupoEditId'
+        ]);
         $this->loadData();
+        $this->loadAlumnosDisponibles();
     }
 
     public function updatedNuevoGrupoEmpresaId($value)
-{
-    $empresa = Empresa::find($value);
-    $this->nuevoGrupo['tutor_empresa'] = $empresa->tutor ?? '';
-}
+    {
+        if ($value) {
+            $empresa = Empresa::find($value);
+            $this->nuevoGrupo['tutor_empresa'] = $empresa->tutor ?? '';
+        } else {
+            $this->nuevoGrupo['tutor_empresa'] = '';
+        }
+    }
 
 
     public function confirmarEliminar($grupoId)
@@ -154,7 +184,7 @@ class AsignarEmpresa extends Component
 
             // Forzar recarga de datos
             $this->grupos = $this->grupos->filter(fn($g) => $g->id != $this->grupoToDelete->id);
-
+            $this->loadAlumnosDisponibles();
             $this->reset(['grupoToDelete', 'showDeleteModal']);
             $this->dispatch('refreshComponent');
         }

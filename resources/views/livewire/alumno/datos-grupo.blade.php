@@ -121,12 +121,12 @@
                             <div>
                                 <label class="block text-sm font-medium mb-1">Centro docente</label>
                                 <input wire:model="centro_docente" type="text"
-                                    class="w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500">
+                                    class="w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500" readonly>
                             </div>
                             <div>
                                 <label class="block text-sm font-medium mb-1">Profesor responsable</label>
                                 <input wire:model="nombre_profesor_practicas" type="text"
-                                    class="w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500">
+                                    class="w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500" readonly>
                             </div>
                         </div>
                     </div>
@@ -138,12 +138,12 @@
                             <div>
                                 <label class="block text-sm font-medium mb-1">Empresa</label>
                                 <input wire:model="empresa_practicas" type="text"
-                                    class="w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500">
+                                    class="w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500" readonly>
                             </div>
                             <div>
                                 <label class="block text-sm font-medium mb-1">Tutor empresa</label>
                                 <input wire:model="tutor_empresa" type="text"
-                                    class="w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500">
+                                    class="w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500" readonly>
                             </div>
                             <div>
                                 <label class="block text-sm font-medium mb-1">Periodo FCT</label>
