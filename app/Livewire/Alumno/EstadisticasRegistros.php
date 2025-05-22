@@ -1,4 +1,5 @@
 <?php
+
 namespace App\Livewire\Alumno;
 
 use Livewire\Component;
@@ -39,13 +40,14 @@ class EstadisticasRegistros extends Component
             ->mapWithKeys(function ($item) {
                 $date = Carbon::createFromFormat('Y-m', $item);
                 return [
-                    $item => ucfirst($date->translatedFormat('F Y'))  // Aquí se usa el formato traducido
+                    $item => ucfirst($date->translatedFormat('F Y'))
                 ];
             })
             ->toArray();
     }
 
-    public function updatedMesSeleccionado(){
+    public function updatedMesSeleccionado()
+    {
         $this->actualizarTodo();
     }
 
@@ -100,60 +102,60 @@ class EstadisticasRegistros extends Component
     }
 
     public function generarSemanas()
-{
-    $this->semanas = [];
+    {
+        $this->semanas = [];
 
-    $fechaInicio = Carbon::createFromFormat('Y-m', $this->mesSeleccionado)->startOfMonth();
-    $fechaFin = Carbon::createFromFormat('Y-m', $this->mesSeleccionado)->endOfMonth();
-    $hoy = now();
+        $fechaInicio = Carbon::createFromFormat('Y-m', $this->mesSeleccionado)->startOfMonth();
+        $fechaFin = Carbon::createFromFormat('Y-m', $this->mesSeleccionado)->endOfMonth();
+        $hoy = now();
 
-    $inicioSemana = $fechaInicio->copy()->startOfWeek(Carbon::MONDAY);
-    $finSemana = $inicioSemana->copy()->endOfWeek(Carbon::SUNDAY);
+        $inicioSemana = $fechaInicio->copy()->startOfWeek(Carbon::MONDAY);
+        $finSemana = $inicioSemana->copy()->endOfWeek(Carbon::SUNDAY);
 
-    $numeroSemana = 1;
+        $numeroSemana = 1;
 
-    while ($inicioSemana->lte($fechaFin)) {
-        if ($finSemana->lt($fechaInicio)) {
+        while ($inicioSemana->lte($fechaFin)) {
+            if ($finSemana->lt($fechaInicio)) {
+                $inicioSemana->addWeek();
+                $finSemana = $inicioSemana->copy()->endOfWeek();
+                continue;
+            }
+
+            // Calculo de los días lectivos y registro aquí en PHP
+            $diasLectivosSemana = 0;
+            $dia = $inicioSemana->copy();
+            while ($dia <= $finSemana) {
+                if (!$dia->isWeekend() && $dia->format('Y-m') === $this->mesSeleccionado) {
+                    $diasLectivosSemana++;
+                }
+                $dia->addDay();
+            }
+
+            $diasRegistradosSemana = Auth::user()->practicas()
+                ->whereNull('deleted_at')
+                ->whereBetween('fecha', [$inicioSemana, $finSemana])
+                ->whereMonth('fecha', $fechaInicio->month)
+                ->whereYear('fecha', $fechaInicio->year)
+                ->whereRaw('DAYOFWEEK(fecha) NOT IN (1,7)')
+                ->distinct('fecha')
+                ->count('fecha');
+
+            $this->semanas[] = [
+                'numero' => $numeroSemana++,
+                'inicio' => $inicioSemana->copy()->format('Y-m-d'),
+                'fin' => $finSemana->copy()->format('Y-m-d'),
+                'inicio_formatted' => $inicioSemana->copy()->format('d/m'),
+                'fin_formatted' => $finSemana->copy()->format('d/m'),
+                'dias_lectivos' => $diasLectivosSemana,
+                'dias_registrados' => $diasRegistradosSemana,
+                'esSemanaActual' => $hoy->between($inicioSemana, $finSemana) && $hoy->format('Y-m') === $fechaInicio->format('Y-m'),
+                'esSemanaDividida' => $inicioSemana->format('Y-m') !== $finSemana->format('Y-m'),
+            ];
+
             $inicioSemana->addWeek();
             $finSemana = $inicioSemana->copy()->endOfWeek();
-            continue;
         }
-
-        // Calculamos los días lectivos y registrados aquí en PHP
-        $diasLectivosSemana = 0;
-        $dia = $inicioSemana->copy();
-        while ($dia <= $finSemana) {
-            if (!$dia->isWeekend() && $dia->format('Y-m') === $this->mesSeleccionado) {
-                $diasLectivosSemana++;
-            }
-            $dia->addDay();
-        }
-
-        $diasRegistradosSemana = Auth::user()->practicas()
-            ->whereNull('deleted_at')
-            ->whereBetween('fecha', [$inicioSemana, $finSemana])
-            ->whereMonth('fecha', $fechaInicio->month)
-            ->whereYear('fecha', $fechaInicio->year)
-            ->whereRaw('DAYOFWEEK(fecha) NOT IN (1,7)')
-            ->distinct('fecha')
-            ->count('fecha');
-
-        $this->semanas[] = [
-            'numero' => $numeroSemana++,
-            'inicio' => $inicioSemana->copy()->format('Y-m-d'),
-            'fin' => $finSemana->copy()->format('Y-m-d'),
-            'inicio_formatted' => $inicioSemana->copy()->format('d/m'),
-            'fin_formatted' => $finSemana->copy()->format('d/m'),
-            'dias_lectivos' => $diasLectivosSemana,
-            'dias_registrados' => $diasRegistradosSemana,
-            'esSemanaActual' => $hoy->between($inicioSemana, $finSemana) && $hoy->format('Y-m') === $fechaInicio->format('Y-m'),
-            'esSemanaDividida' => $inicioSemana->format('Y-m') !== $finSemana->format('Y-m'),
-        ];
-
-        $inicioSemana->addWeek();
-        $finSemana = $inicioSemana->copy()->endOfWeek();
     }
-}
 
     public function toggleAccordion()
     {

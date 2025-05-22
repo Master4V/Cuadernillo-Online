@@ -13,7 +13,6 @@
         </div>
 
         <div class="flex flex-wrap gap-3">
-            <!-- Botón Empresas -->
             <button wire:click="$set('showEmpresasModal', true)"
                 class="flex items-center bg-blue-500 hover:bg-blue-600 text-white px-4 py-2 rounded-lg transition-all shadow hover:shadow-md">
                 <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 mr-2" fill="none" viewBox="0 0 24 24"
@@ -24,7 +23,6 @@
                 Empresas
             </button>
 
-            <!-- Botón Alumnos -->
             <button wire:click="$set('showAlumnosModal', true)"
                 class="flex items-center bg-purple-500 hover:bg-purple-600 text-white px-4 py-2 rounded-lg transition-all shadow hover:shadow-md">
                 <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 mr-2" fill="none" viewBox="0 0 24 24"
@@ -35,7 +33,6 @@
                 Alumnos
             </button>
 
-            <!-- Botón Nuevo Grupo -->
             <button wire:click="$set('showCreateModal', true)"
                 class="flex items-center bg-green-500 hover:bg-green-600 text-white px-4 py-2 rounded-lg transition-all shadow hover:shadow-md">
                 <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 mr-2" fill="none" viewBox="0 0 24 24"
@@ -63,9 +60,23 @@
         </div>
     @endif
 
+    <!--Barra de Busqueda-->
+    <div class="mb-4">
+        <div class="relative">
+            <div class="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
+                <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 text-gray-400" fill="none" viewBox="0 0 24 24"
+                    stroke="currentColor">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                        d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" />
+                </svg>
+            </div>
+            <input type="text" wire:model.live="search" placeholder="Buscar por alumno, tutor o empresa..."
+                class="block w-full pl-10 pr-3 py-2 border border-gray-300 rounded-lg bg-white shadow-sm focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500">
+        </div>
+    </div>
+
     <!-- Tarjeta contenedora de la tabla -->
     <div class="bg-white rounded-xl shadow-md overflow-hidden">
-        <!-- Tabla de grupos -->
         <div class="overflow-x-auto">
             <table class="min-w-full divide-y divide-gray-200">
                 <thead class="bg-gray-50">
@@ -337,8 +348,7 @@
                             <div class="md:col-span-2">
                                 <label class="block text-sm font-medium text-gray-700 mb-1">Centro Docente</label>
                                 <input type="text" wire:model="nuevoGrupo.centro_docente"
-                                    class="w-full px-3 py-2 text-base border border-gray-300 bg-gray-50 rounded-lg"
-                                    readonly>
+                                    class="w-full px-3 py-2 text-base border border-gray-300 bg-gray-50 rounded-lg">
                             </div>
                         </div>
 
@@ -452,5 +462,4 @@
             </div>
         </div>
     @endif
-
 </div>

@@ -1,4 +1,5 @@
 <?php
+
 namespace Database\Seeders;
 
 use App\Models\User;
@@ -15,35 +16,35 @@ class DatabaseSeeder extends Seeder
     {
         //Profesores:
 
-        $profesor1=User::create([
-            'name'=>'Docarmo',
-            'email'=>'docarmo@example.com',
-            'password'=>Hash::make('1234'),
-            'role'=>'profesor',
+        $profesor1 = User::create([
+            'name' => 'Docarmo',
+            'email' => 'docarmo@example.com',
+            'password' => Hash::make('1234'),
+            'role' => 'profesor',
         ]);
-        $profesor2=User::create([
-            'name'=>'Felix',
-            'email'=>'felix@example.com',
-            'password'=>Hash::make('1234'),
-            'role'=>'profesor',
+        $profesor2 = User::create([
+            'name' => 'Felix',
+            'email' => 'felix@example.com',
+            'password' => Hash::make('1234'),
+            'role' => 'profesor',
         ]);
-        $profesor3=User::create([
-            'name'=>'Gonzalo',
-            'email'=>'gonzalo@example.com',
-            'password'=>Hash::make('1234'),
-            'role'=>'profesor',
+        $profesor3 = User::create([
+            'name' => 'Gonzalo',
+            'email' => 'gonzalo@example.com',
+            'password' => Hash::make('1234'),
+            'role' => 'profesor',
         ]);
-        $profesor4=User::create([
-            'name'=>'Arancha',
-            'email'=>'arancha@example.com',
-            'password'=>Hash::make('1234'),
-            'role'=>'profesor',
+        $profesor4 = User::create([
+            'name' => 'Arancha',
+            'email' => 'arancha@example.com',
+            'password' => Hash::make('1234'),
+            'role' => 'profesor',
         ]);
-        $profesor5=User::create([
-            'name'=>'Rosa',
-            'email'=>'rosa@example.com',
-            'password'=>Hash::make('1234'),
-            'role'=>'profesor',
+        $profesor5 = User::create([
+            'name' => 'Rosa',
+            'email' => 'rosa@example.com',
+            'password' => Hash::make('1234'),
+            'role' => 'profesor',
         ]);
 
         //Alumnos:
@@ -137,7 +138,7 @@ class DatabaseSeeder extends Seeder
             'password' => Hash::make('1234'),
             'role' => 'alumno',
         ]);
-/*
+        /*
         //Grupos:
         Grupo::create([
             'profesor_id' => $profesor1->id,

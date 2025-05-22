@@ -34,7 +34,8 @@ class Grupo extends Model
         return $this->belongsTo(User::class, 'alumno_id');
     }
 
-    public function empresa(){
-        return $this->belongsTo(Empresa::class,'empresa_id');
+    public function empresa()
+    {
+        return $this->belongsTo(Empresa::class, 'empresa_id');
     }
 }

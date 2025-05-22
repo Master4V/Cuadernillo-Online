@@ -22,6 +22,7 @@ class AlumnoCrud extends Component
     public $name = '';
     public $email = '';
     public $password = '';
+    public $search = '';
 
     protected $listeners = ['guardarAlumno' => 'guardarRegistro'];
 
@@ -38,7 +39,21 @@ class AlumnoCrud extends Component
 
     public function cargarAlumnos()
     {
-        $this->alumnos = User::where('role', 'alumno')->orderBy('id')->get();
+        $query = User::where('role', 'alumno')
+            ->when($this->search, function ($query) {
+                $query->where(function ($q) {
+                    $q->where('name', 'like', '%' . $this->search . '%')
+                        ->orWhere('email', 'like', '%' . $this->search . '%');
+                });
+            })
+            ->orderBy('id');
+
+        $this->alumnos = $query->get();
+    }
+
+    public function updatedSearch($value)
+    {
+        $this->cargarAlumnos();
     }
 
     public function abrirModal()
@@ -56,7 +71,6 @@ class AlumnoCrud extends Component
         $this->name = $alumno->name;
         $this->email = $alumno->email;
 
-        // Actualizar reglas de validación para edición
         $this->rules['email'] = 'required|email|max:255|unique:users,email,' . $this->alumnoId;
         $this->rules['password'] = 'nullable|min:6';
 
@@ -105,7 +119,7 @@ class AlumnoCrud extends Component
             User::findOrFail($this->alumnoId)->update($data);
             $message = 'Alumno actualizado correctamente.';
         } else {
-            // Verificar si hay un alumno eliminado con ese email
+            // Verifica si hay un alumno eliminado con ese email
             $alumnoEliminado = User::withTrashed()
                 ->where('email', $this->email)
                 ->where('role', 'alumno')

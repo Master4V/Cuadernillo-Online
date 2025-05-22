@@ -6,7 +6,6 @@ use App\Models\Empresa;
 use Livewire\Component;
 use Livewire\WithPagination;
 use Illuminate\Validation\Rule;
-use Illuminate\Support\Facades\DB;
 
 class EmpresaCrud extends Component
 {
@@ -24,6 +23,7 @@ class EmpresaCrud extends Component
     public $telefono = '';
     public $mail = '';
     public $tutor = '';
+    public $search = '';
 
     protected $rules = [
         'nombre' => 'required|string|max:255|unique:empresas,nombre',
@@ -42,7 +42,25 @@ class EmpresaCrud extends Component
 
     public function cargarEmpresas()
     {
-        $this->empresas = Empresa::orderBy('id')->get();
+        // $this->empresas = Empresa::orderBy('id')->get();
+        $query = Empresa::query()
+            ->when($this->search, function ($q) {
+                $q->where(function ($subquery) {
+                    $subquery->where('nombre', 'like', '%' . $this->search . '%')
+                        ->orWhere('direccion', 'like', '%' . $this->search . '%')
+                        ->orWhere('telefono', 'like', '%' . $this->search . '%')
+                        ->orWhere('mail', 'like', '%' . $this->search . '%')
+                        ->orWhere('tutor', 'like', '%' . $this->search . '%');
+                });
+            })
+            ->orderBy('id');
+
+        $this->empresas = $query->get();
+    }
+
+    public function updatedSearch($value)
+    {
+        $this->cargarEmpresas();
     }
 
     public function abrirModal()
@@ -122,7 +140,7 @@ class EmpresaCrud extends Component
             Empresa::findOrFail($this->empresaId)->update($data);
             $message = 'Empresa actualizada correctamente.';
         } else {
-            // Buscar si hay una empresa eliminada con ese nombre
+            // Busca si hay una empresa eliminada con ese nombre
             $empresaEliminada = Empresa::withTrashed()->where('nombre', $this->nombre)->first();
 
             if ($empresaEliminada && $empresaEliminada->trashed()) {

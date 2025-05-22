@@ -6,7 +6,6 @@ use Livewire\Component;
 use App\Models\Practica;
 use Illuminate\Support\Facades\Auth;
 use Carbon\Carbon;
-use Illuminate\Support\Facades\Log;
 
 
 class CalendarioPracticas extends Component
@@ -135,14 +134,6 @@ class CalendarioPracticas extends Component
     {
         $this->validate();
 
-        // Depuración: Mostrar datos antes de guardar
-        logger()->info('Guardando práctica', [
-            'fecha' => $this->fechaSeleccionada,
-            'horas' => $this->horas,
-            'hora_inicio' => $this->hora_inicio,
-            'hora_fin' => $this->hora_fin
-        ]);
-
         Practica::updateOrCreate(
             [
                 'user_id' => Auth::id(),
@@ -168,26 +159,26 @@ class CalendarioPracticas extends Component
     }
 
     public function confirmarEliminacion()
-{
-    $this->showDeleteModal = true;
-}
+    {
+        $this->showDeleteModal = true;
+    }
 
-public function eliminarPractica()
-{
-    Practica::where('user_id', Auth::id())
-        ->where('fecha', $this->fechaSeleccionada)
-        ->delete();
+    public function eliminarPractica()
+    {
+        Practica::where('user_id', Auth::id())
+            ->where('fecha', $this->fechaSeleccionada)
+            ->delete();
 
-    $this->showModal = false;
-    $this->showDeleteModal = false;
-    $this->cargarPracticas();
-    $this->dispatch('practica-actualizada');
-    $this->dispatch(
-        'notify',
-        message: 'Práctica eliminada correctamente',
-        type: 'success'
-    );
-}
+        $this->showModal = false;
+        $this->showDeleteModal = false;
+        $this->cargarPracticas();
+        $this->dispatch('practica-actualizada');
+        $this->dispatch(
+            'notify',
+            message: 'Práctica eliminada correctamente',
+            type: 'success'
+        );
+    }
 
     public function render()
     {

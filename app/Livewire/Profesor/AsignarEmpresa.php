@@ -36,12 +36,16 @@ class AsignarEmpresa extends Component
     public $showDeleteModal = false;
     public $grupoToDelete;
 
+    //Campos CRUDs
     public $showEmpresasModal = false;
     public $showAlumnosModal = false;
 
+    public $search = '';
+
     protected $listeners = ['registroGuardado' => 'actualizarDatos'];
 
-    public function actualizarDatos(){
+    public function actualizarDatos()
+    {
         $this->loadData();
         $this->loadAlumnosDisponibles();
     }
@@ -49,18 +53,34 @@ class AsignarEmpresa extends Component
     public function mount()
     {
         $this->loadData();
-        $this->loadAlumnosDisponibles(); // Usar el nuevo método
+        $this->loadAlumnosDisponibles();
         $this->profesores = User::where('role', 'profesor')->get();
+        $this->empresas = Empresa::all();
     }
 
 
     public function loadData()
     {
-        $this->empresas = Empresa::all();
         $this->grupos = Grupo::with(['alumno', 'profesor', 'empresa'])
+            ->when($this->search, function ($query) {
+                $query->whereHas('alumno', function ($q) {
+                    $q->where('name', 'like', '%' . $this->search . '%');
+                })
+                    ->orWhereHas('profesor', function ($q) {
+                        $q->where('name', 'like', '%' . $this->search . '%');
+                    })
+                    ->orWhereHas('empresa', function ($q) {
+                        $q->where('nombre', 'like', '%' . $this->search . '%');
+                    });
+            })
             ->orderBy('created_at', 'desc')
             ->get()
-            ->fresh(); // Fuerza recarga de relaciones
+            ->fresh();
+    }
+
+    public function updatedSearch($value)
+    {
+        $this->loadData();
     }
 
     public function crearGrupo()
@@ -100,7 +120,6 @@ class AsignarEmpresa extends Component
             $message = 'Grupo creado exitosamente!';
         }
 
-        // Actualizar la lista de alumnos disponibles
         $this->loadAlumnosDisponibles();
 
         $this->cerrarModal();
@@ -130,8 +149,6 @@ class AsignarEmpresa extends Component
             'alumno_id' => $grupo->alumno_id,
             'centro_docente' => $grupo->centro_docente,
             'tutor_empresa' => $grupo->tutor_empresa,
-            // No necesitamos cargar los campos derivados (empresa_practicas, etc)
-            // porque se volverán a calcular al guardar
         ];
 
         $this->grupoEditId = $grupoId;
@@ -182,7 +199,6 @@ class AsignarEmpresa extends Component
         if ($this->grupoToDelete) {
             $this->grupoToDelete->delete();
 
-            // Forzar recarga de datos
             $this->grupos = $this->grupos->filter(fn($g) => $g->id != $this->grupoToDelete->id);
             $this->loadAlumnosDisponibles();
             $this->reset(['grupoToDelete', 'showDeleteModal']);

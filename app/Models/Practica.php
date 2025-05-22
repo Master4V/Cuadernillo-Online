@@ -87,6 +87,6 @@ class Practica extends Model
     public function scopeForMonth($query, $month, $year)
     {
         return $query->whereYear('fecha', $year)
-                    ->whereMonth('fecha', $month);
+            ->whereMonth('fecha', $month);
     }
 }

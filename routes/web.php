@@ -1,6 +1,7 @@
 <?php
 
 use App\Http\Controllers\AlumnoController;
+use App\Http\Controllers\AlumnoPDFController;
 use App\Http\Controllers\ProfesorController;
 use App\Http\Controllers\ProfileController;
 use Illuminate\Support\Facades\Route;
@@ -25,17 +26,18 @@ Route::middleware(['auth', 'role:alumno'])->prefix('alumno')->name('alumno.')->g
     Route::get('/dashboard', function () {
         return view('alumno.dashboard');
     })->name('dashboard');
-    
+
     Route::get('/datos', [AlumnoController::class, 'datos'])->name('datos');
+    Route::get('/pdf', [AlumnoPDFController::class, 'generate'])->name('pdf');
 });
 
 //PROFESOR RUTAS:
 Route::middleware(['auth', 'role:profesor'])->prefix('profesor')->name('profesor.')->group(function () {
-    Route::get('/dashboard', function(){
+    Route::get('/dashboard', function () {
         return view('profesor.dashboard');
     })->name('dashboard');
 
-    Route::get('/asignaciones',[ProfesorController::class, 'asignaciones'])->name('asignaciones');
+    Route::get('/asignaciones', [ProfesorController::class, 'asignaciones'])->name('asignaciones');
 });
 
-require __DIR__.'/auth.php';
+require __DIR__ . '/auth.php';

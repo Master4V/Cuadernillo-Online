@@ -114,7 +114,7 @@
 
                 <!-- Contenido con scroll -->
                 <div class="p-6 overflow-y-auto flex-grow">
-                    <!-- Sección Centro Educativo -->
+                    <!-- Sección Centro Educativo >
                     <div class="bg-blue-50 p-4 rounded-lg mb-6">
                         <h4 class="font-medium text-blue-800 mb-4">Centro Educativo</h4>
                         <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
@@ -129,13 +129,13 @@
                                     class="w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500" readonly>
                             </div>
                         </div>
-                    </div>
+                    </div-->
 
                     <!-- Sección Empresa -->
                     <div class="bg-green-50 p-4 rounded-lg mb-6">
                         <h4 class="font-medium text-green-800 mb-4">Empresa</h4>
                         <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
-                            <div>
+                            <!--div>
                                 <label class="block text-sm font-medium mb-1">Empresa</label>
                                 <input wire:model="empresa_practicas" type="text"
                                     class="w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500" readonly>
@@ -144,7 +144,7 @@
                                 <label class="block text-sm font-medium mb-1">Tutor empresa</label>
                                 <input wire:model="tutor_empresa" type="text"
                                     class="w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500" readonly>
-                            </div>
+                            </div-->
                             <div>
                                 <label class="block text-sm font-medium mb-1">Periodo FCT</label>
                                 <select wire:model="periodo_realizacion"
@@ -230,8 +230,8 @@
 
     <!-- Modal Resultados de Aprendizaje Mejorado -->
     @if ($showRAModal)
-    <div class="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center p-4 z-50 overflow-hidden">
-        <div class="bg-white rounded-lg w-full max-w-7xl mx-4 my-8 flex flex-col" style="max-height: 90vh;">
+        <div class="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center p-4 z-50 overflow-hidden">
+            <div class="bg-white rounded-lg w-full max-w-7xl mx-4 my-8 flex flex-col" style="max-height: 90vh;">
                 <!-- Cabecera -->
                 <div class="flex justify-between items-center p-6 border-b sticky top-0 bg-white z-10">
                     <h3 class="text-xl font-semibold">Resultados de Aprendizaje</h3>
@@ -259,13 +259,17 @@
                                     <!-- Columna R.A. -->
                                     <td class="px-6 py-4 whitespace-normal align-top">
                                         <p class="font-semibold text-blue-600">RA1.</p>
-                                        <p class="text-sm text-gray-600 mt-2">Identifica la estructura y organizacion de la empresa, relacionandola con la produccion y comercializacion de los productos que obtiene.</p>
-                                    </td>   
+                                        <p class="text-sm text-gray-600 mt-2">Identifica la estructura y organizacion
+                                            de la empresa, relacionandola con la produccion y comercializacion de los
+                                            productos que obtiene.</p>
+                                    </td>
                                     <!-- Columna Actividades -->
                                     <td class="px-6 py-4 align-top">
                                         <div class="max-h-40 overflow-y-auto">
                                             <ul class="list-disc pl-5 space-y-2 text-sm">
-                                                <li>Curso/charla iniciacion/presentacion sobre la estructura de la empresa y manuales de trabajo de las distintas tareas que debera realizar el alumno.</li>
+                                                <li>Curso/charla iniciacion/presentacion sobre la estructura de la
+                                                    empresa y manuales de trabajo de las distintas tareas que debera
+                                                    realizar el alumno.</li>
                                             </ul>
                                         </div>
                                     </td>
@@ -275,22 +279,34 @@
                                         <div class="max-h-40 overflow-y-auto">
                                             <ul class="list-decimal pl-5 space-y-2 text-sm">
                                                 <li class="text-green-600">
-                                                    <span class="text-gray-700">Se han identificado la estructura organizativa de la empresa y las funciones de cada area de la misma.</span>
+                                                    <span class="text-gray-700">Se han identificado la estructura
+                                                        organizativa de la empresa y las funciones de cada area de la
+                                                        misma.</span>
                                                 </li>
                                                 <li class="text-green-600">
-                                                    <span class="text-gray-700">Se ha comparado la estructura de la empresa con las organzaciones empresariales tipo existentes en el sector.</span>
+                                                    <span class="text-gray-700">Se ha comparado la estructura de la
+                                                        empresa con las organzaciones empresariales tipo existentes en
+                                                        el sector.</span>
                                                 </li>
                                                 <li class="text-green-600">
-                                                    <span class="text-gray-700">Se han identificado los elementos que constituyen la red logistica de la empresa, proveedores, clientes, sistemas de produccion y almacenaje, entre otros.</span>
+                                                    <span class="text-gray-700">Se han identificado los elementos que
+                                                        constituyen la red logistica de la empresa, proveedores,
+                                                        clientes, sistemas de produccion y almacenaje, entre
+                                                        otros.</span>
                                                 </li>
                                                 <li class="text-green-600">
-                                                    <span class="text-gray-700">Se han identificado los procedimientos de trabajo en el desarrollo de la prestacion del servicio.</span>
+                                                    <span class="text-gray-700">Se han identificado los procedimientos
+                                                        de trabajo en el desarrollo de la prestacion del
+                                                        servicio.</span>
                                                 </li>
                                                 <li class="text-green-600">
-                                                    <span class="text-gray-700">Se han valorado las competencias necesarias de los recursos humanos para el desarrollo optimo de la actividad.</span>
+                                                    <span class="text-gray-700">Se han valorado las competencias
+                                                        necesarias de los recursos humanos para el desarrollo optimo de
+                                                        la actividad.</span>
                                                 </li>
                                                 <li class="text-green-600">
-                                                    <span class="text-gray-700">Se ha valorado la idoneidad de los canales de difusion mas frecuentes en esta actividad.</span>
+                                                    <span class="text-gray-700">Se ha valorado la idoneidad de los
+                                                        canales de difusion mas frecuentes en esta actividad.</span>
                                                 </li>
                                             </ul>
                                         </div>
@@ -300,14 +316,22 @@
                                 <tr>
                                     <td class="px-6 py-4 whitespace-normal align-top">
                                         <p class="font-semibold text-blue-600">RA2.</p>
-                                        <p class="text-sm text-gray-600 mt-2">Aplica habitos eticos y laborales en el desarrollo de su actividad profesional, de acuerdo con las caracteristicas del puesto de trabajo y con los procedimientos establecidos en la empresa.</p>
+                                        <p class="text-sm text-gray-600 mt-2">Aplica habitos eticos y laborales en el
+                                            desarrollo de su actividad profesional, de acuerdo con las caracteristicas
+                                            del puesto de trabajo y con los procedimientos establecidos en la empresa.
+                                        </p>
                                     </td>
                                     <td class="px-6 py-4 align-top">
                                         <div class="max-h-40 overflow-y-auto">
                                             <ul class="list-disc pl-5 space-y-2 text-sm">
-                                                <li>Curso/charla de prevencion de riesgos laborales especificos del entorno de trabajo en el que desempeñara sus funciones.</li>
-                                                <li>Curso/charla de normas de funcionamiento, comportamiento, decoro que debera seguir el alumno</li>
-                                                <li>Coordinara su trabajo con el resto de miembros del equipo siguiendo las indicaciones de su tutor o persona encargada de su seguimiento a traves de reuniones periodicas siguiendo las directrices de la metodologia de desarrollo utilizada en la empresa.</li>
+                                                <li>Curso/charla de prevencion de riesgos laborales especificos del
+                                                    entorno de trabajo en el que desempeñara sus funciones.</li>
+                                                <li>Curso/charla de normas de funcionamiento, comportamiento, decoro que
+                                                    debera seguir el alumno</li>
+                                                <li>Coordinara su trabajo con el resto de miembros del equipo siguiendo
+                                                    las indicaciones de su tutor o persona encargada de su seguimiento a
+                                                    traves de reuniones periodicas siguiendo las directrices de la
+                                                    metodologia de desarrollo utilizada en la empresa.</li>
                                             </ul>
                                         </div>
                                     </td>
@@ -315,40 +339,68 @@
                                         <div class="max-h-40 overflow-y-auto">
                                             <ul class="list-decimal pl-5 space-y-2 text-sm">
                                                 <li class="text-green-600">
-                                                    <span class="text-gray-700">Se han reconocido y justificado: </br> a.La disponibilidad personal y temporal necesaria en el puesto de trabajo.
-                                                    <br>b.Las actitudes personales (puntualidad y empatia, entre otras) y profesionales (orden, limpieza, responsabilidad, entre otras) necesarias para el puesto de trabajo.
-                                                    <br>c.Los requerimientos actitudinales ante la prevencion de riesgos en la actividad profesional.
-                                                    <br>d.Los requerimientos actudinales referidos a la calidad en la actividad laboral.
-                                                    <br>e.Las actitudes relacionales con el propio equipo de trabajo y con las jerarquias establecidas en la empresa.
-                                                    <br>f.Las actitudes relacionadas con la documentacion de las actividades realizadas en el ambito laboral.
-                                                    <br>g.Las necesidades formativas para la insercion y reinsersion laboral en el ambito cientifico y tecnico del buen hacer del profesional. </span>
+                                                    <span class="text-gray-700">Se han reconocido y justificado: </br>
+                                                        a.La disponibilidad personal y temporal necesaria en el puesto
+                                                        de trabajo.
+                                                        <br>b.Las actitudes personales (puntualidad y empatia, entre
+                                                        otras) y profesionales (orden, limpieza, responsabilidad, entre
+                                                        otras) necesarias para el puesto de trabajo.
+                                                        <br>c.Los requerimientos actitudinales ante la prevencion de
+                                                        riesgos en la actividad profesional.
+                                                        <br>d.Los requerimientos actudinales referidos a la calidad en
+                                                        la actividad laboral.
+                                                        <br>e.Las actitudes relacionales con el propio equipo de trabajo
+                                                        y con las jerarquias establecidas en la empresa.
+                                                        <br>f.Las actitudes relacionadas con la documentacion de las
+                                                        actividades realizadas en el ambito laboral.
+                                                        <br>g.Las necesidades formativas para la insercion y reinsersion
+                                                        laboral en el ambito cientifico y tecnico del buen hacer del
+                                                        profesional. </span>
                                                 </li>
                                                 <li class="text-green-600">
-                                                    <span class="text-gray-700">Se han identificado las normas de prevencion de riesgos laborales y los aspectos fundamentales de la Ley de Prevencion de Riesgos Laborales de aplicacion en la actividad profesional.</span>
+                                                    <span class="text-gray-700">Se han identificado las normas de
+                                                        prevencion de riesgos laborales y los aspectos fundamentales de
+                                                        la Ley de Prevencion de Riesgos Laborales de aplicacion en la
+                                                        actividad profesional.</span>
                                                 </li>
                                                 <li class="text-green-600">
-                                                    <span class="text-gray-700">Se han aplicado los equipos de proteccion individual segun los riesgos de la actividad profesional y las normas de la empresa.</span>
+                                                    <span class="text-gray-700">Se han aplicado los equipos de
+                                                        proteccion individual segun los riesgos de la actividad
+                                                        profesional y las normas de la empresa.</span>
                                                 </li>
                                                 <li class="text-green-600">
-                                                    <span class="text-gray-700">Se ha mantenido una actitud de respeto al medio ambiente en las actividades desarrolladas.</span>
+                                                    <span class="text-gray-700">Se ha mantenido una actitud de respeto
+                                                        al medio ambiente en las actividades desarrolladas.</span>
                                                 </li>
                                                 <li class="text-green-600">
-                                                    <span class="text-gray-700">Se ha mantenido organizado, limpio y libre de obstaculos el puesto de trabajo o area correspondiente al desarrollo de la actividad.</span>
+                                                    <span class="text-gray-700">Se ha mantenido organizado, limpio y
+                                                        libre de obstaculos el puesto de trabajo o area correspondiente
+                                                        al desarrollo de la actividad.</span>
                                                 </li>
                                                 <li class="text-green-600">
-                                                    <span class="text-gray-700">Se ha responsabilizado del trabajo asignado interpretando y cumpliendo las instrucciones recibidas.</span>
+                                                    <span class="text-gray-700">Se ha responsabilizado del trabajo
+                                                        asignado interpretando y cumpliendo las instrucciones
+                                                        recibidas.</span>
                                                 </li>
                                                 <li class="text-green-600">
-                                                    <span class="text-gray-700">Se ha establecido una comunicacion eficaz con la persona responsable en cada situacion y con los miembros del equipo.</span>
+                                                    <span class="text-gray-700">Se ha establecido una comunicacion
+                                                        eficaz con la persona responsable en cada situacion y con los
+                                                        miembros del equipo.</span>
                                                 </li>
                                                 <li class="text-green-600">
-                                                    <span class="text-gray-700">Se ha coordinado con el resto del equipo comunicando las incidencias relevantes que se presenten.</span>
+                                                    <span class="text-gray-700">Se ha coordinado con el resto del
+                                                        equipo comunicando las incidencias relevantes que se
+                                                        presenten.</span>
                                                 </li>
                                                 <li class="text-green-600">
-                                                    <span class="text-gray-700">Se ha valorado la importancia de su actividad y la necesidad de adaptacion a los cambios de tareas.</span>
+                                                    <span class="text-gray-700">Se ha valorado la importancia de su
+                                                        actividad y la necesidad de adaptacion a los cambios de
+                                                        tareas.</span>
                                                 </li>
                                                 <li class="text-green-600">
-                                                    <span class="text-gray-700">Se ha responsabilizado de la aplicacion de las normas y procedimientos en el desarrollo de su trabajo.</span>
+                                                    <span class="text-gray-700">Se ha responsabilizado de la aplicacion
+                                                        de las normas y procedimientos en el desarrollo de su
+                                                        trabajo.</span>
                                                 </li>
                                             </ul>
                                         </div>
@@ -358,13 +410,19 @@
                                 <tr>
                                     <td class="px-6 py-4 whitespace-normal align-top">
                                         <p class="font-semibold text-blue-600">RA3.</p>
-                                        <p class="text-sm text-gray-600 mt-2">Organiza los trabajos que se han de desarrollar, identificando las tareas asignadas a partir de la planificacion de proyectos e interpretando documentacion especifica.</p>
+                                        <p class="text-sm text-gray-600 mt-2">Organiza los trabajos que se han de
+                                            desarrollar, identificando las tareas asignadas a partir de la planificacion
+                                            de proyectos e interpretando documentacion especifica.</p>
                                     </td>
                                     <td class="px-6 py-4 align-top">
                                         <div class="max-h-40 overflow-y-auto">
                                             <ul class="list-disc pl-5 space-y-2 text-sm">
-                                                <li>Participar en el desarrollo de proyectos de la empresa creando software para responder a un analisis de requisitos previo y diseño proporcionado por su tutor o supervisores cumpliendo las restrucciones temporales que se indiquen.</li>
-                                                <li>Planificara y distribuira temporalmente las tareas de desarrollo encargadas por sus responsables.</li>
+                                                <li>Participar en el desarrollo de proyectos de la empresa creando
+                                                    software para responder a un analisis de requisitos previo y diseño
+                                                    proporcionado por su tutor o supervisores cumpliendo las
+                                                    restrucciones temporales que se indiquen.</li>
+                                                <li>Planificara y distribuira temporalmente las tareas de desarrollo
+                                                    encargadas por sus responsables.</li>
                                             </ul>
                                         </div>
                                     </td>
@@ -372,25 +430,34 @@
                                         <div class="max-h-40 overflow-y-auto">
                                             <ul class="list-decimal pl-5 space-y-2 text-sm">
                                                 <li class="text-green-600">
-                                                    <span class="text-gray-700">Se ha interpretado la normativa o bibliografia adecuada al tipo de tarea a desarrollar.</span>
+                                                    <span class="text-gray-700">Se ha interpretado la normativa o
+                                                        bibliografia adecuada al tipo de tarea a desarrollar.</span>
                                                 </li>
                                                 <li class="text-green-600">
-                                                    <span class="text-gray-700">Se ha reconocido en que fases del proceso o proyecto se encuadran las tareas que se van a realizar.</span>
+                                                    <span class="text-gray-700">Se ha reconocido en que fases del
+                                                        proceso o proyecto se encuadran las tareas que se van a
+                                                        realizar.</span>
                                                 </li>
                                                 <li class="text-green-600">
-                                                    <span class="text-gray-700">Se ha planificado el trabajo para cada tarea, secuenciando y priorizando sus fases.</span>
+                                                    <span class="text-gray-700">Se ha planificado el trabajo para cada
+                                                        tarea, secuenciando y priorizando sus fases.</span>
                                                 </li>
                                                 <li class="text-green-600">
-                                                    <span class="text-gray-700">Se han identificado los equipos y servicios auxiliares necesarios para el desarrollo de la tarea encomendada.</span>
+                                                    <span class="text-gray-700">Se han identificado los equipos y
+                                                        servicios auxiliares necesarios para el desarrollo de la tarea
+                                                        encomendada.</span>
                                                 </li>
                                                 <li class="text-green-600">
-                                                    <span class="text-gray-700">Se ha organizado el aprovisionamiento y almacenaje de los recursos materiales.</span>
+                                                    <span class="text-gray-700">Se ha organizado el aprovisionamiento y
+                                                        almacenaje de los recursos materiales.</span>
                                                 </li>
                                                 <li class="text-green-600">
-                                                    <span class="text-gray-700">Se ha valorado el orden y el metodo en la realizacion de las tareas.</span>
+                                                    <span class="text-gray-700">Se ha valorado el orden y el metodo en
+                                                        la realizacion de las tareas.</span>
                                                 </li>
                                                 <li class="text-green-600">
-                                                    <span class="text-gray-700">Se han identificado las normativas que sea preciso observar segun cada tarea.</span>
+                                                    <span class="text-gray-700">Se han identificado las normativas que
+                                                        sea preciso observar segun cada tarea.</span>
                                                 </li>
                                             </ul>
                                         </div>
@@ -400,15 +467,25 @@
                                 <tr>
                                     <td class="px-6 py-4 whitespace-normal align-top">
                                         <p class="font-semibold text-blue-600">RA4.</p>
-                                        <p class="text-sm text-gray-600 mt-2">Gestiona y utiliza sistemas informaticos y entornos de desarrollo, evaluando sus requerimientos y caracteristicas en funcion del proposito de uso.</p>
+                                        <p class="text-sm text-gray-600 mt-2">Gestiona y utiliza sistemas informaticos
+                                            y entornos de desarrollo, evaluando sus requerimientos y caracteristicas en
+                                            funcion del proposito de uso.</p>
                                     </td>
                                     <td class="px-6 py-4 align-top">
                                         <div class="max-h-40 overflow-y-auto">
                                             <ul class="list-disc pl-5 space-y-2 text-sm">
-                                                <li>Utilizara entornos de desarrollo y sistemas informaticos proporcionados por la empresa para desarrollar proyectos software.</li>
-                                                <li>Participara o tendra conocimiento de todas las fases de desarrollo que existen en el proyecto del que es participe.</li>
-                                                <li>Elaborara la documentacion tecnica pertinente acorde a los procedimiento de la empresa para el subsistema del que sea participe.</li>
-                                                <li>Trabajara con los sistemas HW de desarrollo utilizados en la empresa para la creacion de la aplicacion. Tendra conocimiento de los procedimientos de despliegue de la aplicacion en sistemas de produccion.</li>
+                                                <li>Utilizara entornos de desarrollo y sistemas informaticos
+                                                    proporcionados por la empresa para desarrollar proyectos software.
+                                                </li>
+                                                <li>Participara o tendra conocimiento de todas las fases de desarrollo
+                                                    que existen en el proyecto del que es participe.</li>
+                                                <li>Elaborara la documentacion tecnica pertinente acorde a los
+                                                    procedimiento de la empresa para el subsistema del que sea
+                                                    participe.</li>
+                                                <li>Trabajara con los sistemas HW de desarrollo utilizados en la empresa
+                                                    para la creacion de la aplicacion. Tendra conocimiento de los
+                                                    procedimientos de despliegue de la aplicacion en sistemas de
+                                                    produccion.</li>
                                             </ul>
                                         </div>
                                     </td>
@@ -416,22 +493,35 @@
                                         <div class="max-h-40 overflow-y-auto">
                                             <ul class="list-decimal pl-5 space-y-2 text-sm">
                                                 <li class="text-green-600">
-                                                    <span class="text-gray-700">Se ha trabajado sobre diferentes sistemas informaticos, identificando en cada caso su hardware, sistemas operativos y aplicaciones instaladas y las restricciones o condiciones especificas de uso.</span>
+                                                    <span class="text-gray-700">Se ha trabajado sobre diferentes
+                                                        sistemas informaticos, identificando en cada caso su hardware,
+                                                        sistemas operativos y aplicaciones instaladas y las
+                                                        restricciones o condiciones especificas de uso.</span>
                                                 </li>
                                                 <li class="text-green-600">
-                                                    <span class="text-gray-700">Se ha gestionado la informacion en diferentes sistemas, aplicando medidas que aseguren la integridad y disponibilidad de los datos.</span>
+                                                    <span class="text-gray-700">Se ha gestionado la informacion en
+                                                        diferentes sistemas, aplicando medidas que aseguren la
+                                                        integridad y disponibilidad de los datos.</span>
                                                 </li>
                                                 <li class="text-green-600">
-                                                    <span class="text-gray-700">Se ha participado en la gestion de recursos en red identificando las restriccionesde seguridad existentes.</span>
+                                                    <span class="text-gray-700">Se ha participado en la gestion de
+                                                        recursos en red identificando las restriccionesde seguridad
+                                                        existentes.</span>
                                                 </li>
                                                 <li class="text-green-600">
-                                                    <span class="text-gray-700">Se han utilizado aplicaciones informaticas para elaborar, distribuir y mantener documentacion tecnica y de asistencia a usuarios.</span>
+                                                    <span class="text-gray-700">Se han utilizado aplicaciones
+                                                        informaticas para elaborar, distribuir y mantener documentacion
+                                                        tecnica y de asistencia a usuarios.</span>
                                                 </li>
                                                 <li class="text-green-600">
-                                                    <span class="text-gray-700">Se han utilizado entornos de desarrollo para editar, depurar, probar y documentar codigo, ademas de generar ejecutables.</span>
+                                                    <span class="text-gray-700">Se han utilizado entornos de desarrollo
+                                                        para editar, depurar, probar y documentar codigo, ademas de
+                                                        generar ejecutables.</span>
                                                 </li>
                                                 <li class="text-green-600">
-                                                    <span class="text-gray-700">Se han gestionado entornos de desarrollo añadiendo y empleando complementos especificos en las distintas fases de proyectos de desarrollo.</span>
+                                                    <span class="text-gray-700">Se han gestionado entornos de
+                                                        desarrollo añadiendo y empleando complementos especificos en las
+                                                        distintas fases de proyectos de desarrollo.</span>
                                                 </li>
                                             </ul>
                                         </div>
@@ -441,12 +531,17 @@
                                 <tr>
                                     <td class="px-6 py-4 whitespace-normal align-top">
                                         <p class="font-semibold text-blue-600">RA5.</p>
-                                        <p class="text-sm text-gray-600 mt-2">Participa en el desarrollo de aplicaciones con acceso a datos planificando la estructura de la base de datos y evaluando el alcance y la repercusion de las transacciones.</p>
+                                        <p class="text-sm text-gray-600 mt-2">Participa en el desarrollo de
+                                            aplicaciones con acceso a datos planificando la estructura de la base de
+                                            datos y evaluando el alcance y la repercusion de las transacciones.</p>
                                     </td>
                                     <td class="px-6 py-4 align-top">
                                         <div class="max-h-40 overflow-y-auto">
                                             <ul class="list-disc pl-5 space-y-2 text-sm">
-                                                <li>Estudiara y tendra conocimiento del modelo de datos del subsistema en el que este trabajando, desarrollando operaciones de consulta o actualizacion, si procede, sobre las mismas en el desarrollo de la aplicacion sobre la que trabaje.</li>
+                                                <li>Estudiara y tendra conocimiento del modelo de datos del subsistema
+                                                    en el que este trabajando, desarrollando operaciones de consulta o
+                                                    actualizacion, si procede, sobre las mismas en el desarrollo de la
+                                                    aplicacion sobre la que trabaje.</li>
                                             </ul>
                                         </div>
                                     </td>
@@ -454,34 +549,49 @@
                                         <div class="max-h-40 overflow-y-auto">
                                             <ul class="list-decimal pl-5 space-y-2 text-sm">
                                                 <li class="text-green-600">
-                                                    <span class="text-gray-700">Se ha interpretado el diseño logico de bases de datos que aseguran la accesibilidad a los datos.</span>
+                                                    <span class="text-gray-700">Se ha interpretado el diseño logico de
+                                                        bases de datos que aseguran la accesibilidad a los datos.</span>
                                                 </li>
                                                 <li class="text-green-600">
-                                                    <span class="text-gray-700">Se ha participado en la materializacion del diseño logico sobre algun sistema gestor de bases de datos.</span>
+                                                    <span class="text-gray-700">Se ha participado en la materializacion
+                                                        del diseño logico sobre algun sistema gestor de bases de
+                                                        datos.</span>
                                                 </li>
                                                 <li class="text-green-600">
-                                                    <span class="text-gray-700">Se han utilizado bases de datos aplicando tecnicas para mantener la persistencia de la informacion.</span>
+                                                    <span class="text-gray-700">Se han utilizado bases de datos
+                                                        aplicando tecnicas para mantener la persistencia de la
+                                                        informacion.</span>
                                                 </li>
                                                 <li class="text-green-600">
-                                                    <span class="text-gray-700">Se han ejecutado consultas directas y procedimientos capaces de gestionar y almacenar objetos y datos de la base de datos.</span>
+                                                    <span class="text-gray-700">Se han ejecutado consultas directas y
+                                                        procedimientos capaces de gestionar y almacenar objetos y datos
+                                                        de la base de datos.</span>
                                                 </li>
                                                 <li class="text-green-600">
-                                                    <span class="text-gray-700">Se han establecido conexiones con bases de datos para ejecutar consultas y recuperar los resultados en objetos de acceso a datos.</span>
+                                                    <span class="text-gray-700">Se han establecido conexiones con bases
+                                                        de datos para ejecutar consultas y recuperar los resultados en
+                                                        objetos de acceso a datos.</span>
                                                 </li>
                                                 <li class="text-green-600">
-                                                    <span class="text-gray-700">Se han desarrollado formularios e informes como parte de aplicaciones que gestionan de forma integral la informacion almacenada en una base de datos.</span>
+                                                    <span class="text-gray-700">Se han desarrollado formularios e
+                                                        informes como parte de aplicaciones que gestionan de forma
+                                                        integral la informacion almacenada en una base de datos.</span>
                                                 </li>
                                                 <li class="text-green-600">
-                                                    <span class="text-gray-700">Se ha comprobado la configuracion de los servicios de red para garantizar la ejecucion segura de las aplicaciones Cliente-Servidor.</span>
+                                                    <span class="text-gray-700">Se ha comprobado la configuracion de
+                                                        los servicios de red para garantizar la ejecucion segura de las
+                                                        aplicaciones Cliente-Servidor.</span>
                                                 </li>
                                                 <li class="text-green-600">
-                                                    <span class="text-gray-700">Se ha elaborado la documentacion asociada a la gestion de las bases de datos empleadas y las aplicaciones desarrolladas.</span>
+                                                    <span class="text-gray-700">Se ha elaborado la documentacion
+                                                        asociada a la gestion de las bases de datos empleadas y las
+                                                        aplicaciones desarrolladas.</span>
                                                 </li>
                                             </ul>
                                         </div>
                                     </td>
                                 </tr>
-                                
+
                             </tbody>
                         </table>
                     </div>

@@ -2,8 +2,6 @@
 
 namespace App\Livewire\Profesor;
 
-use App\Models\Grupo;
-use App\Models\Practica;
 use App\Models\User;
 use Carbon\Carbon;
 use Illuminate\Support\Facades\Auth;
@@ -14,9 +12,18 @@ class ProgresoAlumnos extends Component
     public $mesSeleccionado;
     public $anoSeleccionado;
     public $meses = [
-        1 => 'Enero', 2 => 'Febrero', 3 => 'Marzo', 4 => 'Abril',
-        5 => 'Mayo', 6 => 'Junio', 7 => 'Julio', 8 => 'Agosto',
-        9 => 'Septiembre', 10 => 'Octubre', 11 => 'Noviembre', 12 => 'Diciembre'
+        1 => 'Enero',
+        2 => 'Febrero',
+        3 => 'Marzo',
+        4 => 'Abril',
+        5 => 'Mayo',
+        6 => 'Junio',
+        7 => 'Julio',
+        8 => 'Agosto',
+        9 => 'Septiembre',
+        10 => 'Octubre',
+        11 => 'Noviembre',
+        12 => 'Diciembre'
     ];
     public $anos;
 
@@ -33,18 +40,18 @@ class ProgresoAlumnos extends Component
     {
         $profesorId = Auth::id();
         $totalDiasLectivos = $this->calcularDiasLectivos();
-        
-        $alumnos = User::whereHas('grupoComoAlumno', function($query) use ($profesorId) {
-                        $query->where('profesor_id', $profesorId);
-                    })
-                    ->with(['practicas' => function($query) {
-                        $query->whereMonth('fecha', $this->mesSeleccionado)
-                              ->whereYear('fecha', $this->anoSeleccionado);
-                    }])
-                    ->get()
-                    ->map(function($alumno) use ($totalDiasLectivos) {
-                        return $this->calcularProgreso($alumno, $totalDiasLectivos);
-                    });
+
+        $alumnos = User::whereHas('grupoComoAlumno', function ($query) use ($profesorId) {
+            $query->where('profesor_id', $profesorId);
+        })
+            ->with(['practicas' => function ($query) {
+                $query->whereMonth('fecha', $this->mesSeleccionado)
+                    ->whereYear('fecha', $this->anoSeleccionado);
+            }])
+            ->get()
+            ->map(function ($alumno) use ($totalDiasLectivos) {
+                return $this->calcularProgreso($alumno, $totalDiasLectivos);
+            });
 
         return view('livewire.profesor.progreso-alumnos', [
             'alumnos' => $alumnos,
@@ -61,16 +68,16 @@ class ProgresoAlumnos extends Component
     {
         try {
             $diasConRegistro = $alumno->practicas
-                ->filter(function($practica) {
+                ->filter(function ($practica) {
                     return Carbon::parse($practica->fecha)->isWeekday();
                 })
                 ->unique('fecha')
                 ->count();
-            
-            $progreso = $totalDiasLectivos > 0 
+
+            $progreso = $totalDiasLectivos > 0
                 ? round(($diasConRegistro / $totalDiasLectivos) * 100, 2)
                 : 0;
-                
+
             return (object)[
                 'id' => $alumno->id,
                 'name' => $alumno->name,
@@ -97,7 +104,7 @@ class ProgresoAlumnos extends Component
     {
         return Carbon::create($this->anoSeleccionado, $this->mesSeleccionado, 1)
             ->daysUntil(Carbon::create($this->anoSeleccionado, $this->mesSeleccionado)->endOfMonth())
-            ->filter(function($date) {
+            ->filter(function ($date) {
                 return $date->isWeekday();
             })
             ->count();

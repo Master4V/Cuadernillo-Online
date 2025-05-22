@@ -27,10 +27,9 @@ class RouteServiceProvider extends ServiceProvider
 
         return '/'; // fallback si no tiene rol válido
     }
-    
+
     public function boot(): void
     {
-        // En el método boot() de tu provider:
         $this->configureRateLimiting();
         Route::aliasMiddleware('role', \App\Http\Middleware\CheckRole::class);
 

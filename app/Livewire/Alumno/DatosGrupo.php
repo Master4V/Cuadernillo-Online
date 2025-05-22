@@ -3,7 +3,6 @@
 namespace App\Livewire\Alumno;
 
 use Livewire\Component;
-use App\Models\Grupo;
 use Illuminate\Support\Facades\Auth;
 
 class DatosGrupo extends Component
@@ -11,7 +10,6 @@ class DatosGrupo extends Component
     public $isOpen = false;
     public $expanded = false;
 
-    // Campos actualizados
     public $centro_docente;
     public $nombre_profesor_practicas;
     public $empresa_practicas;
@@ -22,7 +20,7 @@ class DatosGrupo extends Component
     public $ciclo;
     public $grado;
     public $showRAModal = false;
-    
+
 
     protected $rules = [
         'centro_docente' => 'nullable|string|max:255',
@@ -36,7 +34,7 @@ class DatosGrupo extends Component
         'grado' => 'nullable|string|max:255'
     ];
 
-    public $ciclosOptions = []; // Nueva propiedad para opciones de ciclo
+    public $ciclosOptions = [];
 
     protected function getCiclosPorFamiliaYGrado()
     {
@@ -284,7 +282,7 @@ class DatosGrupo extends Component
     public function mount()
     {
         $this->loadGrupoData();
-        $this->updateCiclosOptions(); // Cargar ciclos iniciales si existen datos
+        $this->updateCiclosOptions();
     }
 
     public function updated($propertyName)
@@ -341,7 +339,7 @@ class DatosGrupo extends Component
     public function closeModal()
     {
         $this->isOpen = false;
-        $this->loadGrupoData(); // Recarga los datos originales al cancelar
+        $this->loadGrupoData();
     }
     public function toggleAccordion()
     {

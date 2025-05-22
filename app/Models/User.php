@@ -81,11 +81,13 @@ class User extends Authenticatable
         return $this->role === 'admin';
     }
 
-    public function grupoComoAlumno(){
+    public function grupoComoAlumno()
+    {
         return $this->hasOne(Grupo::class, 'alumno_id');
     }
 
-    public function alumnosComoProfesor(){
+    public function alumnosComoProfesor()
+    {
         return $this->hasMany(Grupo::class, 'profesor_id');
     }
 }
