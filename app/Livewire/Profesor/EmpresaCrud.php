@@ -103,7 +103,7 @@ class EmpresaCrud extends Component
         session()->flash('message', 'Empresa eliminada correctamente.');
     }
 
-    public function guardarRegistro()
+    public function guardarEmpresa()
     {
         $this->validate([
             'nombre' => [

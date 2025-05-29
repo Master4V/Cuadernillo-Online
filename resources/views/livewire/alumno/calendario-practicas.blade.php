@@ -19,7 +19,7 @@
 
         <div class="flex items-center">
             @if ($mostrarDatepicker)
-                <input type="date" wire:model="fechaActual" wire:change="actualizarFecha"
+                <input type="month" wire:model="fechaActual" wire:change="actualizarFecha"
                     class="border rounded p-2 text-center" wire:blur="$set('mostrarDatepicker', false)">
             @else
                 <button wire:click="$set('mostrarDatepicker', true)" class="text-lg font-medium">

@@ -43,7 +43,7 @@ return [
 
     /*
     |--------------------------------------------------------------------------
-    | Application URL
+    | Application URL https://www.ieslamarisma.net/proyectos/2025/dutu
     |--------------------------------------------------------------------------
     |
     | This URL is used by the console to properly generate URLs when using

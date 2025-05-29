@@ -343,25 +343,96 @@
     <p class="mt-1 text-sm text-red-600">{{ $message }}</p>
 @enderror
                             </div-->
+                            <!-- Sección Datos Académicos -->
+                            <div class="md:col-span-2 bg-purple-50 p-4 rounded-lg">
+                                <h4 class="font-medium text-purple-800 mb-4">Datos Académicos</h4>
+                                <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
 
-                            <!-- Centro Docente -->
-                            <div class="md:col-span-2">
-                                <label class="block text-sm font-medium text-gray-700 mb-1">Centro Docente</label>
-                                <input type="text" wire:model="nuevoGrupo.centro_docente"
-                                    class="w-full px-3 py-2 text-base border border-gray-300 bg-gray-50 rounded-lg">
-                            </div>
-                        </div>
+                                    <!-- Curso académico -->
+                                    <div>
+                                        <label class="block text-sm font-medium text-gray-700 mb-1">Curso
+                                            escolar</label>
+                                        <input type="text" wire:model="nuevoGrupo.curso_academico"
+                                            placeholder="2024/2025"
+                                            class="w-full pl-3 pr-10 py-2 text-base border border-gray-300 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 rounded-lg"
+                                            pattern="\d{4}/\d{4}">
+                                    </div>
 
-                        <div class="mt-8 flex justify-end space-x-3">
-                            <button type="button" wire:click="cerrarModal"
-                                class="px-4 py-2 border border-gray-300 rounded-lg text-gray-700 hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500">
-                                Cancelar
-                            </button>
-                            <button type="submit"
-                                class="px-4 py-2 bg-indigo-600 text-white rounded-lg hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500">
-                                {{ $isEditing ? 'Actualizar Grupo' : 'Crear Grupo' }}
-                            </button>
-                        </div>
+                                    <!-- Periodo FCT -->
+                                    <div>
+                                        <label class="block text-sm font-medium text-gray-700 mb-1">Periodo FCT</label>
+                                        <select wire:model="nuevoGrupo.periodo_realizacion"
+                                            class="w-full pl-3 pr-10 py-2 text-base border border-gray-300 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 rounded-lg">
+                                            <option value="">-- Seleccione una opción --</option>
+                                            <option value="Primer Trimestre">Primer Trimestre</option>
+                                            <option value="Segundo Trimestre">Segundo Trimestre</option>
+                                            <option value="Tercer Trimestre">Tercer Trimestre</option>
+                                        </select>
+                                    </div>
+
+                                    <!-- Familia Profesional -->
+                                    <div>
+                                        <label class="block text-sm font-medium text-gray-700 mb-1">Familia
+                                            profesional</label>
+                                        <select wire:model.live="nuevoGrupo.familia_profesional"
+                                            class="w-full pl-3 pr-10 py-2 text-base border border-gray-300 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 rounded-lg">
+                                            <option value="">-- Seleccione familia --</option>
+                                            @foreach (array_keys($this->getCiclosPorFamiliaYGrado()) as $familia)
+                                                <option value="{{ $familia }}">{{ $familia }}</option>
+                                            @endforeach
+                                        </select>
+                                    </div>
+
+                                    <!-- Grado -->
+                                    <div>
+                                        <label class="block text-sm font-medium text-gray-700 mb-1">Grado</label>
+                                        <select wire:model.live="nuevoGrupo.grado"
+                                            class="w-full pl-3 pr-10 py-2 text-base border border-gray-300 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 rounded-lg">
+                                            <option value="">-- Seleccione grado --</option>
+                                            <option value="Medio">Grado Medio</option>
+                                            <option value="Superior">Grado Superior</option>
+                                        </select>
+                                    </div>
+
+                                    <!-- Selector de Ciclo -->
+                                    <div>
+                                        <label class="block text-sm font-medium text-gray-700 mb-1">Ciclo</label>
+                                        <select wire:model="nuevoGrupo.ciclo"
+                                            wire:key="ciclo-{{ $familia_profesional }}-{{ $grado }}"
+                                            class="w-full pl-3 pr-10 py-2 text-base border border-gray-300 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 rounded-lg"
+                                            @disabled(!count($ciclosOptions))>
+                                            <option value="">-- Seleccione ciclo --</option>
+                                            @foreach ($ciclosOptions as $ciclo)
+                                                <option value="{{ $ciclo }}">{{ $ciclo }}</option>
+                                            @endforeach
+                                            @if ($nuevoGrupo['familia_profesional'] && $nuevoGrupo['grado'] && !count($ciclosOptions))
+                                                <option disabled>No hay ciclos disponibles</option>
+                                            @endif
+                                        </select>
+                                        @error('nuevoGrupo.ciclo')
+                                            <p class="mt-1 text-sm text-red-600">{{ $message }}</p>
+                                        @enderror
+                                    </div>
+
+                                    <!-- Centro Docente -->
+                                    <div class="md:col-span-2">
+                                        <label class="block text-sm font-medium text-gray-700 mb-1">Centro
+                                            Docente</label>
+                                        <input type="text" wire:model="nuevoGrupo.centro_docente"
+                                            class="w-full px-3 py-2 text-base border border-gray-300 bg-gray-50 rounded-lg">
+                                    </div>
+                                </div>
+
+                                <div class="mt-8 flex justify-end space-x-3">
+                                    <button type="button" wire:click="cerrarModal"
+                                        class="px-4 py-2 border border-gray-300 rounded-lg text-gray-700 hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500">
+                                        Cancelar
+                                    </button>
+                                    <button type="submit"
+                                        class="px-4 py-2 bg-indigo-600 text-white rounded-lg hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500">
+                                        {{ $isEditing ? 'Actualizar Grupo' : 'Crear Grupo' }}
+                                    </button>
+                                </div>
                     </form>
                 </div>
             </div>

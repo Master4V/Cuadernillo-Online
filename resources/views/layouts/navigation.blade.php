@@ -107,6 +107,12 @@
                         {{ __('Mis Datos') }}
                     </x-responsive-nav-link>
                 @endif
+
+                @if (auth()->user()->role === 'profesor')
+                    <x-responsive-nav-link :href="route('profesor.asignaciones')" :active="request()->routeIs('profesor.asignaciones')">
+                        {{ __('Asignar') }}
+                    </x-responsive-nav-link>
+                @endif
             </div>
 
             <!-- Responsive Settings Options -->

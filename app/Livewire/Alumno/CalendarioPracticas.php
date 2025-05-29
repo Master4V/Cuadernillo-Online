@@ -33,7 +33,7 @@ class CalendarioPracticas extends Component
 
     public function mount()
     {
-        $this->fechaActual = now()->format('Y-m-d');
+        $this->fechaActual = now()->format('Y-m');
         $this->cargarPracticas();
     }
 

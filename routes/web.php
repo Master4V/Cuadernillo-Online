@@ -9,7 +9,7 @@ use SebastianBergmann\CodeCoverage\Report\Html\Dashboard;
 
 Route::get('/', function () {
     return view('welcome');
-});
+})->name('welcome');
 
 /*Route::get('/dashboard', function () {
     return view('dashboard');

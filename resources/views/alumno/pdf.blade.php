@@ -215,8 +215,12 @@
     <!-- Variables para el contador de páginas -->
     @php
         // Calculamos el número total de páginas
-        $totalPages = 4; // Portada + Programa formativo + Informe tutor + Cuestionario
-        $totalPages += ceil($practicas->count() / 10); // Páginas de prácticas semanales
+        $totalPages = 5; // Portada + Programa formativo + Informe tutor + Cuestionario
+        $totalPages += $practicas
+            ->groupBy(function ($item) {
+                return \Carbon\Carbon::parse($item->fecha)->startOfWeek()->format('Y-m-d');
+            })
+            ->count();
 
         // Inicializamos el contador de página actual
         $currentPage = 1;
@@ -265,11 +269,24 @@
         <p class="info-field">PERÍODO DE REALIZACIÓN DE LA FCT: {{ $grupo->periodo_realizacion ?? 'No especificado' }}
         </p><br>
 
-        <p class="info-field">CURSO ESCOLAR: {{ $grupo->curso_academico ?? now()->format('Y') - 1 }}</p>
+        <p class="info-field"><strong>CURSO ESCOLAR:</strong> {{ $grupo->curso_academico ?? now()->format('Y') - 1 }}</p>
         <p class="info-field">FAMILIA PROFESIONAL: {{ $grupo->familia_profesional ?? 'No seleccionada' }} </p>
         <p class="info-field">CICLO FORMATIVO: {{ $grupo->ciclo ?? 'No seleccionado' }} </p>
         <p class="info-field">GRADO: {{ $grupo->grado ?? 'No seleccionado' }} </p>
 
+        <div class="firma-section">
+            <div class="firma-line">EL/LA PROFESOR/A RESPONSABLE DEL SEGUIMIENTO</div>
+            <div class="firma-line">Fdo: _________________________</div>
+            <div style="margin-top: 20px;" class="firma-line">EL/LA JEFE/A DEL DEPARTAMENTO DE FAMILIA PROFESIONAL</div>
+            <div class="firma-line">Fdo: _________________________</div>
+        </div>
+
+        <div class="footer-page">
+            Consejería de Educación <span class="page-counter">(Hoja {{ $currentPage++ }} de
+                {{ $totalPages }})</span>
+        </div>
+    </div>
+    <div class="page">
         <p class="section-title">RESULTADOS DE APRENDIZAJE</p>
 
         <!-- RA 1 -->
@@ -465,12 +482,12 @@
             </ol>
         </div>
 
-        <div class="firma-section">
+        <!--div class="firma-section">
             <div class="firma-line">EL/LA PROFESOR/A RESPONSABLE DEL SEGUIMIENTO</div>
             <div class="firma-line">Fdo: _________________________</div>
             <div style="margin-top: 20px;" class="firma-line">EL/LA JEFE/A DEL DEPARTAMENTO DE FAMILIA PROFESIONAL</div>
             <div class="firma-line">Fdo: _________________________</div>
-        </div>
+        </div-->
 
         <div class="footer-page">
             Consejería de Educación <span class="page-counter">(Hoja {{ $currentPage++ }} de

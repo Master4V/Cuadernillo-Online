@@ -83,10 +83,10 @@
 
                 <!-- Botones de acción -->
                 <div class="flex gap-4 mt-6">
-                    <button wire:click="openModal"
+                    <!--button wire:click="openModal"
                         class="px-4 py-2 bg-blue-600 text-white rounded-md hover:bg-blue-700">
                         ✏️ Editar Datos
-                    </button>
+                    </button-->
                     <button wire:click="openRAModal"
                         class="px-4 py-2 bg-gray-600 text-white rounded-md hover:bg-gray-700">
                         📚 R.A. (Resultados de Aprendizaje)
@@ -101,132 +101,7 @@
     </div>
 
     <!-- Modal Edit -->
-    @if ($isOpen)
-        <div class="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center p-4 z-50 overflow-y-hidden">
-            <div class="bg-white rounded-lg w-full max-w-4xl mx-auto my-8 flex flex-col" style="max-height: 90vh;">
-                <!-- Cabecera del modal -->
-                <div class="flex justify-between items-center p-6 border-b sticky top-0 bg-white z-10">
-                    <h3 class="text-xl font-semibold">Editar Datos Completo</h3>
-                    <button wire:click="closeModal" class="text-gray-500 hover:text-gray-700 text-2xl">
-                        &times;
-                    </button>
-                </div>
 
-                <!-- Contenido con scroll -->
-                <div class="p-6 overflow-y-auto flex-grow">
-                    <!-- Sección Centro Educativo >
-                    <div class="bg-blue-50 p-4 rounded-lg mb-6">
-                        <h4 class="font-medium text-blue-800 mb-4">Centro Educativo</h4>
-                        <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
-                            <div>
-                                <label class="block text-sm font-medium mb-1">Centro docente</label>
-                                <input wire:model="centro_docente" type="text"
-                                    class="w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500" readonly>
-                            </div>
-                            <div>
-                                <label class="block text-sm font-medium mb-1">Profesor responsable</label>
-                                <input wire:model="nombre_profesor_practicas" type="text"
-                                    class="w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500" readonly>
-                            </div>
-                        </div>
-                    </div-->
-
-                    <!-- Sección Empresa -->
-                    <div class="bg-green-50 p-4 rounded-lg mb-6">
-                        <h4 class="font-medium text-green-800 mb-4">Empresa</h4>
-                        <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
-                            <!--div>
-                                <label class="block text-sm font-medium mb-1">Empresa</label>
-                                <input wire:model="empresa_practicas" type="text"
-                                    class="w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500" readonly>
-                            </div>
-                            <div>
-                                <label class="block text-sm font-medium mb-1">Tutor empresa</label>
-                                <input wire:model="tutor_empresa" type="text"
-                                    class="w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500" readonly>
-                            </div-->
-                            <div>
-                                <label class="block text-sm font-medium mb-1">Periodo FCT</label>
-                                <select wire:model="periodo_realizacion"
-                                    class="w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500">
-                                    <option value="">--Seleccione una opción--</option>
-                                    <option value="Primer Trimestre">Primer Trimestre</option>
-                                    <option value="Segundo Trimestre">Segundo Trimestre</option>
-                                    <option value="Tercer Trimestre">Tercer Trimestre</option>
-                                </select>
-                            </div>
-                        </div>
-                    </div>
-
-                    <!-- Sección Datos Académicos -->
-                    <div class="bg-purple-50 p-4 rounded-lg">
-                        <h4 class="font-medium text-purple-800 mb-4">Datos Académicos</h4>
-                        <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
-                            <div>
-                                <label class="block text-sm font-medium mb-1">Curso escolar</label>
-                                <input type="text" wire:model="curso_academico" placeholder="2024/2025"
-                                    class="w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500"
-                                    pattern="\d{4}/\d{4}">
-                            </div>
-
-                            <!-- Selector de Familia Profesional -->
-                            <div>
-                                <label class="block text-sm font-medium mb-1">Familia profesional</label>
-                                <select wire:model.live="familia_profesional"
-                                    class="w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500">
-                                    <option value="">-- Seleccione familia --</option>
-                                    @foreach (['Actividades Físicas y Deportivas', 'Administración y Gestión', 'Agraria', 'Artes Gráficas', 'Artes y Artesanías', 'Comercio y Marketing', 'Edificación y Obra Civil', 'Electricidad y Electrónica', 'Energía y Agua', 'Fabricación Mecánica', 'Hostelería y Turismo', 'Imagen Personal', 'Imagen y Sonido', 'Industrias Alimentarias', 'Industrias Extractivas', 'Informática y Comunicaciones', 'Instalación y Mantenimiento', 'Madera, Mueble y Corcho', 'Marítimo-Pesquera', 'Química', 'Sanidad', 'Seguridad y Medio Ambiente', 'Servicios Socioculturales y a la Comunidad', 'Textil, Confección y Piel', 'Transporte y Mantenimiento de Vehículos', 'Vidrio y Cerámica'] as $familia)
-                                        <option value="{{ $familia }}">{{ $familia }}</option>
-                                    @endforeach
-                                </select>
-                            </div>
-
-                            <!-- Selector de Grado -->
-                            <div>
-                                <label class="block text-sm font-medium mb-1">Grado</label>
-                                <select wire:model.live="grado"
-                                    class="w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500">
-                                    <option value="">-- Seleccione grado --</option>
-                                    <option value="Medio">Grado Medio</option>
-                                    <option value="Superior">Grado Superior</option>
-                                </select>
-                            </div>
-
-                            <!-- Selector de Ciclo -->
-                            <div>
-                                <label class="block text-sm font-medium mb-1">Ciclo</label>
-                                <select wire:model="ciclo"
-                                    class="w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500"
-                                    wire:key="ciclo-{{ $familia_profesional }}-{{ $grado }}"
-                                    @disabled(!count($ciclosOptions))>
-                                    <option value="">-- Seleccione ciclo --</option>
-                                    @foreach ($ciclosOptions as $cicloOption)
-                                        <option value="{{ $cicloOption }}">{{ $cicloOption }}</option>
-                                    @endforeach
-                                    @if ($familia_profesional && $grado && !count($ciclosOptions))
-                                        <option disabled>No hay ciclos disponibles</option>
-                                    @endif
-                                </select>
-                            </div>
-
-                        </div>
-                    </div>
-                </div>
-
-                <!-- Botones fijos en la parte inferior -->
-                <div class="p-4 border-t bg-white sticky bottom-0 flex justify-end gap-3">
-                    <button wire:click="save"
-                        class="px-6 py-3 bg-blue-600 text-white rounded-md hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2">
-                        Guardar Cambios
-                    </button>
-                    <button wire:click="closeModal"
-                        class="px-6 py-3 bg-gray-200 text-gray-700 rounded-md hover:bg-gray-300 focus:outline-none focus:ring-2 focus:ring-gray-500 focus:ring-offset-2">
-                        Cancelar
-                    </button>
-                </div>
-            </div>
-        </div>
-    @endif
 
     <!-- Modal Resultados de Aprendizaje Mejorado -->
     @if ($showRAModal)

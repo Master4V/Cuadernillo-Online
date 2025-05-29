@@ -18,34 +18,6 @@
 
     <!-- Estilos para animaciones -->
     <style>
-        /* Animación de fondo gradiente */
-        .gradient-bg {
-            position: fixed;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            z-index: -1;
-            opacity: 0.1;
-            background: linear-gradient(-45deg, #ee7752, #e73c7e, #23a6d5, #23d5ab);
-            background-size: 400% 400%;
-            animation: gradient 15s ease infinite;
-        }
-
-        @keyframes gradient {
-            0% {
-                background-position: 0% 50%;
-            }
-
-            50% {
-                background-position: 100% 50%;
-            }
-
-            100% {
-                background-position: 0% 50%;
-            }
-        }
-
         /* Animación de entrada del formulario */
         .form-animation {
             animation: fadeInUp 0.6s ease-out forwards;
@@ -81,8 +53,6 @@
 </head>
 
 <body class="font-sans text-gray-900 antialiased">
-    <!-- Fondo gradiente animado ->
-        <div class="gradient-bg"></div-->
 
     <div class="min-h-screen flex flex-col sm:justify-center items-center pt-6 sm:pt-0">
         <div class="logo-animation">
